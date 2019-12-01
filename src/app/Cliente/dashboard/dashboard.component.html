@@ -1,0 +1,223 @@
+<div class="container">
+    <div class="header">
+        <h2>{{cliente.nome}}
+            <span class="space"></span>
+            <span>
+                <mat-form-field>
+                    <mat-label>Ano</mat-label>
+                    <mat-select #yr [(ngModel)]="year" (selectionChange)="loadByYear(yr.value)">
+                        <mat-option *ngFor="let y of years" [value]="y">
+                            {{y}}
+                        </mat-option>
+                    </mat-select>
+                </mat-form-field>
+            </span>
+        </h2>
+    </div>
+
+    <div class="section">
+        <!-- Tabs com os dados dos pedidos -->
+        <mat-tab-group mat-align-tabs="start">
+            <mat-tab label="Pedidos em Aberto ({{pedidosAberto.length}})">
+                <div class="content">
+                    <div class="mat-elevation-z8">
+                        <mat-table [dataSource]="pedidosAberto" class="mat-elevation-z8">
+                            <!-- Position Column -->
+                            <ng-container matColumnDef="refInterna">
+                                <mat-header-cell *matHeaderCellDef> Ref. </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.refInterna}} </mat-cell>
+                            </ng-container>
+
+                            <!-- Symbol Column -->
+                            <ng-container matColumnDef="imagem">
+                                <mat-header-cell *matHeaderCellDef> Imagem </mat-header-cell>
+                                <mat-cell *matCellDef="let element">
+                                    <img src="../../assets/img/temas/{{element.imagem}}" alt="" height="60px">
+                                </mat-cell>
+                            </ng-container>
+
+                            <!-- Name Column -->
+                            <ng-container matColumnDef="tema">
+                                <mat-header-cell *matHeaderCellDef> Tema </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.tema}} </mat-cell>
+                            </ng-container>
+
+                            <!-- Weight Column -->
+                            <ng-container matColumnDef="dataPedido">
+                                <mat-header-cell *matHeaderCellDef> Data </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.dataPedido}} </mat-cell>
+                            </ng-container>
+                            <!-- Data Status Column -->
+                            <ng-container matColumnDef="dataSituacao">
+                                <mat-header-cell *matHeaderCellDef> Data Status </mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.dataSituacao}} </mat-cell>
+                            </ng-container>
+
+
+                            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                            <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                        </mat-table>
+                    </div>
+                </div>
+            </mat-tab>
+            <mat-tab label="Pedidos para Aprovação ({{pedidosParaAprovacao.length}})">
+                <div class="content">
+                    <mat-table [dataSource]="pedidosParaAprovacao" class="mat-elevation-z8">
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="refInterna">
+                            <mat-header-cell *matHeaderCellDef> Ref. </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.refInterna}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="imagem">
+                            <mat-header-cell *matHeaderCellDef> Imagem </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <img src="../../assets/img/temas/{{element.imagem}}" alt="" height="60px">
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="tema">
+                            <mat-header-cell *matHeaderCellDef> Tema </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.tema}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="dataPedido">
+                            <mat-header-cell *matHeaderCellDef> Data </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.dataPedido}} </mat-cell>
+                        </ng-container>
+                        <!-- Data Status Column -->
+                        <ng-container matColumnDef="dataSituacao">
+                            <mat-header-cell *matHeaderCellDef> Data Status </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.dataSituacao}} </mat-cell>
+                        </ng-container>
+
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+                </div>
+            </mat-tab>
+            <mat-tab label="Pedidos Aprovados ({{pedidosAprovados.length}})">
+                <div class="content">
+                    <mat-table [dataSource]="pedidosAprovados" class="mat-elevation-z8">
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="refInterna">
+                            <mat-header-cell *matHeaderCellDef> Ref. </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.refInterna}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="imagem">
+                            <mat-header-cell *matHeaderCellDef> Imagem </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <img src="../../assets/img/temas/{{element.imagem}}" alt="" height="60px">
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="tema">
+                            <mat-header-cell *matHeaderCellDef> Tema </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.tema}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="dataPedido">
+                            <mat-header-cell *matHeaderCellDef> Data </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.dataPedido}} </mat-cell>
+                        </ng-container>
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="dataSituacao">
+                                <mat-header-cell *matHeaderCellDef> Data Status</mat-header-cell>
+                                <mat-cell *matCellDef="let element"> {{element.dataSituacao}} </mat-cell>
+                            </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+                </div>
+            </mat-tab>
+            <mat-tab label="Pedidos para Produção ({{pedidosProducao.length}})">
+                <div class="content">
+                    <mat-table [dataSource]="pedidosProducao" class="mat-elevation-z8">
+                        <!-- Ref interna Column -->
+                        <ng-container matColumnDef="refInterna">
+                            <mat-header-cell *matHeaderCellDef> Ref. Interna </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.refInterna}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Imagem Column -->
+                        <ng-container matColumnDef="imagem">
+                            <mat-header-cell *matHeaderCellDef> Imagem </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <img src="../../assets/img/temas/{{element.imagem}}" alt="" height="60px">
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Tema Column -->
+                        <ng-container matColumnDef="tema">
+                            <mat-header-cell *matHeaderCellDef> Tema </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.tema}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Data Pedido Column -->
+                        <ng-container matColumnDef="dataPedido">
+                            <mat-header-cell *matHeaderCellDef> Data </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.dataPedido}} </mat-cell>
+                        </ng-container>
+                        <!-- Data Status Column -->
+                        <ng-container matColumnDef="dataSituacao">
+                            <mat-header-cell *matHeaderCellDef> Data Status </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.dataSituacao}} </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+                </div>
+            </mat-tab>
+            <mat-tab label="Pedidos para Concluidos ({{pedidosFinalizados.length}})">
+                <div class="content">
+                    <mat-table [dataSource]="pedidosFinalizados" class="mat-elevation-z8">
+                        <!-- Position Column -->
+                        <ng-container matColumnDef="refInterna">
+                            <mat-header-cell *matHeaderCellDef> Ref. </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.refInterna}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Symbol Column -->
+                        <ng-container matColumnDef="imagem">
+                            <mat-header-cell *matHeaderCellDef> Imagem </mat-header-cell>
+                            <mat-cell *matCellDef="let element">
+                                <img src="../../assets/img/temas/{{element.imagem}}" alt="" height="60px">
+                            </mat-cell>
+                        </ng-container>
+
+                        <!-- Name Column -->
+                        <ng-container matColumnDef="tema">
+                            <mat-header-cell *matHeaderCellDef> Tema </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.tema}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Weight Column -->
+                        <ng-container matColumnDef="dataPedido">
+                            <mat-header-cell *matHeaderCellDef> Data </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.dataPedido}} </mat-cell>
+                        </ng-container>
+
+                        <!-- Data Status Column -->
+                        <ng-container matColumnDef="dataSituacao">
+                            <mat-header-cell *matHeaderCellDef> Data Status </mat-header-cell>
+                            <mat-cell *matCellDef="let element"> {{element.dataSituacao}} </mat-cell>
+                        </ng-container>
+
+                        <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                        <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                    </mat-table>
+                </div>
+            </mat-tab>
+        </mat-tab-group>
+    </div>
+</div>

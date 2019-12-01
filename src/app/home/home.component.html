@@ -1,0 +1,20 @@
+<div class="container">
+    <header class="header">
+        <h1>Lista de Clientes Ativos</h1>
+    </header>
+
+    <div class="section">
+            <mat-card class="card" *ngFor="let c of clientes" [routerLink]="['/cliente', c.id]">
+                    <mat-card-header>
+                      <mat-card-title>{{c.nome}}</mat-card-title>
+                    </mat-card-header>
+                   <img mat-card-image src="../../assets/img/logos/{{c.logo}}" alt="Logotipo de {{c.nome}}">
+<!--                     <mat-card-content>
+
+                    </mat-card-content>
+                    <mat-card-actions>
+                      <button mat-button></button>
+                    </mat-card-actions> -->
+                  </mat-card>
+    </div>
+</div>

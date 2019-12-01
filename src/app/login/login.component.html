@@ -1,0 +1,29 @@
+<div class="container">
+    <div class="title">
+        <h1>Calika Baby</h1>
+    </div>
+
+    <div class="login">
+        <form  #form="ngForm" (ngSubmit)="login(form.value)">
+        <mat-form-field>
+            <input matInput placeholder="Utilizador" type="text" 
+                class="login-input" name="username" ngModel>
+            <mat-icon matSuffix>perm_identity</mat-icon>
+        </mat-form-field>
+
+        <mat-form-field>
+            <input matInput placeholder="Enter your password" [type]="hide ? 'password' : 'text'" 
+                name="password" ngModel>
+            <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'"
+                [attr.aria-pressed]="hide">
+                <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+            </button>
+        </mat-form-field>
+        <button mat-stroked-button type="submit" color="primary">Entrar</button>
+    </form>
+
+    </div>
+
+
+
+</div>

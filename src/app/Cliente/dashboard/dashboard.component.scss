@@ -1,0 +1,44 @@
+.container{
+    width: 94%;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin: auto;
+}
+.header{
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+.mat-form-field {
+    display: inline-block;
+    position: relative;
+    text-align: left;
+    margin-left: 40px;
+    width: 80px;
+    font-size: 1rem;
+}
+.mat-form-field-infix {
+    display: block;
+    position: relative;
+    flex: auto;
+    min-width: 0;
+    width: 80px;
+}
+
+
+
+.section{
+    width: 100%;
+}
+.mat-tab-group {
+    margin-bottom: 48px;
+  }
+  
+.table{
+    width: 90%;
+}
+
+mat-cell{
+    height: 70px;
+}
