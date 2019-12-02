@@ -13,6 +13,8 @@ export class DashboardComponent implements OnInit {
   cliente: any = [];
   years = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
   year: number;
+  anos: number [];
+  ano: number;
   pedidosAberto: any = [];
   pedidosParaAprovacao: any = [];
   pedidosAprovados: any = [];
@@ -23,16 +25,17 @@ export class DashboardComponent implements OnInit {
   displayedColumns: string[] = ['refInterna', 'imagem', 'tema', 'dataPedido', 'dataSituacao'];
 
   constructor(
-      private route: ActivatedRoute,
-      private data: DataService,
-      private dialog: MatDialog
-      ) {
+    private route: ActivatedRoute,
+    private data: DataService,
+    private dialog: MatDialog
+  ) {
 
     this.id = this.route.snapshot.params.id;
     this.data.getData('clientes/' + this.id).subscribe(
       (resp: any) => {
         if (resp) {
           this.cliente = resp;
+          console.table(this.cliente.nome);
           this.loadData(this.id, this.year);
         } else {
           alert('Erro ao carregar cliente. Contacte suporte');
@@ -72,30 +75,43 @@ export class DashboardComponent implements OnInit {
           { nome: 'Pedidos para Aprovação', list: this.pedidosParaAprovacao },
           { nome: 'Pedidos Aprovados', list: this.pedidosAprovados },
           { nome: 'Pedidos em Produção', list: this.pedidosProducao },
-          { nome: 'Pedidos em Concluidos', list: this.pedidosFinalizados }
+          { nome: 'Pedidos Concluidos', list: this.pedidosFinalizados }
         ];
       }
     );
 
-}
+  }
 
-openDialog(ln): void {
-  console.log(ln);
-  // tslint:disable-next-line: no-use-before-declare
-  const dialogRef = this.dialog.open(DashboardImageDialog, {
-    width: '80%',
-    data: {tema: ln.tema, imagem: ln.imagem}
-  });
+  onFileSelected() {
+    const inputNode: any = document.querySelector('#file');
+    if (typeof (FileReader) !== 'undefined') {
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        console.log( e.target.result);
+      };
+      reader.readAsArrayBuffer(inputNode.files[0]);
+    }
+  }
 
-  dialogRef.afterClosed().subscribe(result => {
-    console.log('The dialog was closed');
-  });
-}
+  openDialog(ln): void {
+    console.log(ln);
+    // tslint:disable-next-line: no-use-before-declare
+    const dialogRef = this.dialog.open(DashboardImageDialog, {
+      width: '80%',
+      data: { tema: ln.tema, imagem: ln.imagem }
+    });
 
-ngOnInit() {
-  const d = new Date();
-  this.year = d.getFullYear();
-}
+    dialogRef.afterClosed().subscribe(result => {
+      console.log('The dialog was closed');
+    });
+  }
+
+  ngOnInit() {
+    const d = new Date();
+    this.year = d.getFullYear();
+    this.ano = d.getFullYear();
+    this.anos = [this.ano, this.ano + 1];
+  }
 
 }
 
@@ -109,7 +125,7 @@ export class DashboardImageDialog {
 
   constructor(
     public dialogRef: MatDialogRef<DashboardImageDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any []) {}
+    @Inject(MAT_DIALOG_DATA) public data: any[]) { }
 
   onNoClick(): void {
     this.dialogRef.close();

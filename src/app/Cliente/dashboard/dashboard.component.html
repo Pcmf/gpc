@@ -2,22 +2,53 @@
     <div class="header">
         <h2>{{cliente.nome}}
             <span class="space"></span>
-            <span>
-                <mat-form-field>
-                    <mat-label>Ano</mat-label>
-                    <mat-select #yr [(ngModel)]="year" (selectionChange)="loadByYear(yr.value)">
-                        <mat-option *ngFor="let y of years" [value]="y">
-                            {{y}}
-                        </mat-option>
-                    </mat-select>
-                </mat-form-field>
-            </span>
+            <mat-form-field class="title short">
+                <mat-label>Ano</mat-label>
+                <mat-select #yr [(ngModel)]="year" (selectionChange)="loadByYear(yr.value)">
+                    <mat-option *ngFor="let y of years" [value]="y">
+                        {{y}}
+                    </mat-option>
+                </mat-select>
+            </mat-form-field>
         </h2>
     </div>
 
     <div class="section">
         <!-- Tabs com os dados dos pedidos -->
         <mat-tab-group mat-align-tabs="start">
+            <mat-tab label="Criar Pedido">
+                <div class="content">
+                    <div class="mat-elevation-z8">
+                        <h2>Criar pedido</h2>
+                            <form #f="ngForm" (submit)="createPedido(f.value)" class="formCreate">
+                                <div class="formView">
+                                    <mat-form-field class="short">
+                                        <mat-label>Ano</mat-label>
+                                        <mat-select #ano name="ano" [ngModel]="ano">
+                                            <mat-option *ngFor="let a of anos" [value]="a">
+                                                {{a}}
+                                            </mat-option>
+                                        </mat-select>
+                                    </mat-form-field>
+                                    <mat-form-field class="normal">
+                                        <mat-label>Nome do Tema</mat-label>
+                                        <input matInput placeholder="Tema">
+                                    </mat-form-field>
+                                    <mat-form-field class="normal">
+                                        <mat-label>Referência do Cliente</mat-label>
+                                        <input matInput placeholder="Referência">
+                                    </mat-form-field>
+                                    <button type="button" mat-raised-button (click)="fileInput.click()">Choose
+                                        File</button>
+                                    <input hidden (change)="onFileSelected()" #fileInput type="file" id="file">
+                                </div>
+                                <div class="image-preview">
+                                    <img src="" alt="">
+                                </div>
+                            </form>
+                    </div>
+                </div>
+            </mat-tab>
             <mat-tab *ngFor="let pedido of pedidos" label="{{pedido.nome}} ({{pedido.list.length}})">
                 <div class="content">
                     <div class="mat-elevation-z8">
@@ -33,7 +64,8 @@
                             <ng-container matColumnDef="imagem">
                                 <mat-header-cell *matHeaderCellDef> Imagem </mat-header-cell>
                                 <mat-cell *matCellDef="let element">
-                                    <img src="../../assets/img/temas/{{element.imagem}}" alt="" height="60px"  (click)="openDialog(element)">
+                                    <img src="../../assets/img/temas/{{element.imagem}}" alt="" height="60px"
+                                        (click)="openDialog(element)">
                                 </mat-cell>
                             </ng-container>
 
@@ -61,6 +93,7 @@
                     </div>
                 </div>
             </mat-tab>
+
 
         </mat-tab-group>
     </div>
