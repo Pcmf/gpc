@@ -9,7 +9,7 @@ import { LoginComponent } from './login/login.component';
 import { FormsModule } from '@angular/forms';
 import { NavbarComponent } from './navbar/navbar.component';
 import { HomeComponent } from './home/home.component';
-import { DashboardComponent } from './Cliente/dashboard/dashboard.component';
+import { DashboardComponent, DashboardImageDialog } from './Cliente/dashboard/dashboard.component';
 import { DataService } from './Services/data.service';
 import { AuthGuardService } from './Services/auth-guard.service';
 import { NavbarService } from './Services/navbar.service';
@@ -21,7 +21,11 @@ import { HttpClientModule } from '@angular/common/http';
     LoginComponent,
     NavbarComponent,
     HomeComponent,
-    DashboardComponent
+    DashboardComponent,
+    DashboardImageDialog
+  ],
+  entryComponents: [
+    DashboardImageDialog
   ],
   imports: [
     BrowserModule,

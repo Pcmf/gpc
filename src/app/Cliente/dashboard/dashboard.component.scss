@@ -35,10 +35,23 @@
     margin-bottom: 48px;
   }
   
-.table{
+.content{
     width: 90%;
+    margin: auto;
+    margin-top: 2rem;
+}
+mat-header-cell{
+    font-size: 1.05rem;
+    font-weight: 600;
 }
 
 mat-cell{
     height: 70px;
+}
+mat-cell img{
+    cursor: pointer;
+}
+
+mat-cell a, a:hover, a:visited{
+    text-decoration: none;
 }
