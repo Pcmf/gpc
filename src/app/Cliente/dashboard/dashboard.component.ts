@@ -24,6 +24,8 @@ export class DashboardComponent implements OnInit {
 
   displayedColumns: string[] = ['refInterna', 'imagem', 'tema', 'dataPedido', 'dataSituacao'];
 
+  fileData: File = null;
+
   constructor(
     private route: ActivatedRoute,
     private data: DataService,
@@ -83,14 +85,20 @@ export class DashboardComponent implements OnInit {
   }
 
   onFileSelected() {
-    const inputNode: any = document.querySelector('#file');
+    const formData = new FormData();
+    formData.append('file' , this.fileData);
+    this.data.uploadImage('imagens', formData).subscribe(
+      resp => console.log(resp)
+    );
+
+/*     const inputNode: any = document.querySelector('#file');
     if (typeof (FileReader) !== 'undefined') {
       const reader = new FileReader();
       reader.onload = (e: any) => {
         console.log( e.target.result);
       };
       reader.readAsArrayBuffer(inputNode.files[0]);
-    }
+    } */
   }
 
   openDialog(ln): void {

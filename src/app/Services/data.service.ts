@@ -45,6 +45,10 @@ export class DataService {
     return this.http.delete(this.ADDRESS + path, this.getHeaders());
   }
 
+  uploadImage(path: string, obj: any){
+    return this.http.post(this.ADDRESS + path, obj);
+  }
+
   checkuser(credenciais) {
     return this.http.post(this.ADDRESS + 'auth',
       JSON.stringify(credenciais))
