@@ -20,7 +20,8 @@
                 <div class="content">
                     <div class="mat-elevation-z8">
                         <h2>Criar pedido</h2>
-                            <form #f="ngForm" (submit)="createPedido(f.value)" class="formCreate">
+                            <!-- Form para criar o pedido -->
+                            <form #f="ngForm" (submit)="createPedido(f.value)" class="formCreate" *ngIf="!pedidoIniciado">
                                 <div class="formView">
                                     <mat-form-field class="short">
                                         <mat-label>Ano</mat-label>
@@ -38,18 +39,72 @@
                                         <mat-label>Referência do Cliente</mat-label>
                                         <input matInput placeholder="Referência">
                                     </mat-form-field>
-                                    <button type="button" mat-raised-button (click)="fileInput.click()">Choose
-                                        File</button>
-                                    <input hidden (change)="onFileSelected()" #fileInput type="file" name="imagem" id="file">
+                                    <button type="button" mat-raised-button (click)="fileInput.click()">Selecionar Imagem</button>
+                                    <input hidden ngModel (change)="handleInputChange($event)" #fileInput type="file" name="imagem" id="file" accept="image/jpeg, image/png">
                                 
                                     <button id="submit" mat-raised-button color="accent" type="submit">Guardar</button>
                                 
                                 </div>
 
                                 <div class="image-preview">
-                                    <img src="" alt="">
+                                    <img [src]="preview" alt="" height="300px">
                                 </div>
                             </form>
+                            <!-- Painel para pedido iniciado -->
+                            <div *ngIf="pedidoIniciado">
+                                <mat-card>
+                                    <div class="mat-card-left">
+                                        <ul>
+                                            <li>Tema:<span>{{tema}}</span></li>
+                                            <li>Cliente:<span>{{cliente.nome}}</span></li>
+                                            <li>Ref:<span>{{refinterna}}</span></li>
+                                        </ul>
+                                    </div>
+                                    <div class="mata-card-right">
+                                        <img [src]="imagem" height="100%" alt="">
+                                    </div>
+                                </mat-card>
+
+                            <!-- Linhas do pedido - modelos -->
+                            <mat-table [dataSource]="pedido.list" class="mat-elevation-z8">
+                                <!-- Position Column -->
+                                <ng-container matColumnDef="refInterna">
+                                    <mat-header-cell *matHeaderCellDef> Ref. Interna </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">
+                                        <a [routerLink]="['/detPedido', element.id]"> {{element.refinterna}}</a> </mat-cell>
+                                </ng-container>
+    
+                                <!-- Symbol Column -->
+                                <ng-container matColumnDef="imagem">
+                                    <mat-header-cell *matHeaderCellDef> Imagem </mat-header-cell>
+                                    <mat-cell *matCellDef="let element">
+                                        <img src="{{element.foto}}" alt="" height="60px"
+                                            (click)="openDialog(element)">
+                                    </mat-cell>
+                                </ng-container>
+    
+                                <!-- Name Column -->
+                                <ng-container matColumnDef="tema">
+                                    <mat-header-cell *matHeaderCellDef> Tema </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.tema}} </mat-cell>
+                                </ng-container>
+    
+                                <!-- Weight Column -->
+                                <ng-container matColumnDef="dataPedido">
+                                    <mat-header-cell *matHeaderCellDef> Data </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.dataPedido}} </mat-cell>
+                                </ng-container>
+                                <!-- Data Status Column -->
+                                <ng-container matColumnDef="dataSituacao">
+                                    <mat-header-cell *matHeaderCellDef> Data Status </mat-header-cell>
+                                    <mat-cell *matCellDef="let element"> {{element.dataSituacao}} </mat-cell>
+                                </ng-container>
+    
+    
+                                <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+                                <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+                            </mat-table>
+                        </div>
                     </div>
                 </div>
             </mat-tab>
@@ -68,7 +123,7 @@
                             <ng-container matColumnDef="imagem">
                                 <mat-header-cell *matHeaderCellDef> Imagem </mat-header-cell>
                                 <mat-cell *matCellDef="let element">
-                                    <img src="../../assets/img/temas/{{element.imagem}}" alt="" height="60px"
+                                    <img src="{{element.foto}}" alt="" height="60px"
                                         (click)="openDialog(element)">
                                 </mat-cell>
                             </ng-container>

@@ -2,6 +2,7 @@ import { Component, OnInit, Inject } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from 'src/app/Services/data.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
+import {NgxImageCompressService} from 'ngx-image-compress';
 
 @Component({
   selector: 'app-dash-client',
@@ -24,12 +25,18 @@ export class DashboardComponent implements OnInit {
 
   displayedColumns: string[] = ['refInterna', 'imagem', 'tema', 'dataPedido', 'dataSituacao'];
 
-  fileData: File = null;
+  private filetype: string;
+  private filename: string;
+  preview: string;
+  private filesize: number;
+
+  pedidoIniciado: false;
 
   constructor(
     private route: ActivatedRoute,
     private data: DataService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private imageCompress: NgxImageCompressService
   ) {
 
     this.id = this.route.snapshot.params.id;
@@ -84,29 +91,44 @@ export class DashboardComponent implements OnInit {
 
   }
 
-  onFileSelected() {
-    const formData = new FormData();
-    formData.append('file' , this.fileData);
-    this.data.uploadImage('imagens', formData).subscribe(
-      resp => console.log(resp)
-    );
 
-/*     const inputNode: any = document.querySelector('#file');
-    if (typeof (FileReader) !== 'undefined') {
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        console.log( e.target.result);
-      };
-      reader.readAsArrayBuffer(inputNode.files[0]);
-    } */
+  handleInputChange(e) {
+    const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
+    this.filetype = (file.type).substr((file.type).indexOf('/') + 1);
+    this.filename = file.name;
+    this.filesize = file.size;
+    const pattern2 = /image-*/;
+    const reader = new FileReader();
+
+    reader.onload = this._handleReaderLoaded.bind(this);
+    reader.readAsDataURL(file);
+
   }
+  _handleReaderLoaded(e) {
+    const reader = e.target;
+    if (this.filesize > 30000){
+    this.imageCompress.compressFile(reader.result, 1, 50, 80).then(
+        resp => {
+            this.preview = resp;
+          }
+
+      );
+    } else {
+      this.preview = reader.result;
+    }
+
+  }
+
+
+
+
 
   openDialog(ln): void {
     console.log(ln);
     // tslint:disable-next-line: no-use-before-declare
     const dialogRef = this.dialog.open(DashboardImageDialog, {
-      width: '80%',
-      data: { tema: ln.tema, imagem: ln.imagem }
+      width: '60%',
+      data: { tema: ln.tema, foto: ln.foto }
     });
 
     dialogRef.afterClosed().subscribe(result => {

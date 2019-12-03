@@ -14,6 +14,7 @@ import { DataService } from './Services/data.service';
 import { AuthGuardService } from './Services/auth-guard.service';
 import { NavbarService } from './Services/navbar.service';
 import { HttpClientModule } from '@angular/common/http';
+import {NgxImageCompressService} from 'ngx-image-compress';
 
 @NgModule({
   declarations: [
@@ -38,7 +39,8 @@ import { HttpClientModule } from '@angular/common/http';
   providers: [
     DataService,
     AuthGuardService,
-    NavbarService
+    NavbarService,
+    NgxImageCompressService
   ],
   bootstrap: [AppComponent]
 })
