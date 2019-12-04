@@ -13,9 +13,9 @@ export class DashboardComponent implements OnInit {
   private id: number;
   cliente: any = [];
   years = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
-  year: number;
+/*   year: number;
   anos: number [];
-  ano: number;
+  ano: number; */
   pedidosAberto: any = [];
   pedidosParaAprovacao: any = [];
   pedidosAprovados: any = [];
@@ -31,6 +31,12 @@ export class DashboardComponent implements OnInit {
   private filesize: number;
 
   pedidoIniciado = false;
+  newPedidoId = 0;
+  private d = new Date();
+  year = this.d.getFullYear();
+  ano = this.d.getFullYear();
+  anos = [this.ano, this.ano + 1];
+
 
   constructor(
     private route: ActivatedRoute,
@@ -38,7 +44,6 @@ export class DashboardComponent implements OnInit {
     private dialog: MatDialog,
     private imageCompress: NgxImageCompressService
   ) {
-
     this.id = this.route.snapshot.params.id;
     this.data.getData('clientes/' + this.id).subscribe(
       (resp: any) => {
@@ -54,10 +59,7 @@ export class DashboardComponent implements OnInit {
   }
 
   ngOnInit() {
-    const d = new Date();
-    this.year = d.getFullYear();
-    this.ano = d.getFullYear();
-    this.anos = [this.ano, this.ano + 1];
+
   }
 
   loadByYear(year) {
@@ -137,9 +139,12 @@ export class DashboardComponent implements OnInit {
 
     this.data.editData('pedidos/' + this.id, obj).subscribe(
       resp => {
-        console.log(resp);
         if (+resp > 0) {
+          this.newPedidoId = +resp;
           this.pedidoIniciado = true;
+          console.log('Novo pedido ' + this.newPedidoId);
+          this.year = obj.anoTema;
+          this.loadByYear(obj.anoTema);
         }
       }
     );

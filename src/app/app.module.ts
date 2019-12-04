@@ -28,7 +28,8 @@ import { FormPedidoComponent } from './Cliente/form-pedido/form-pedido.component
     FormPedidoComponent
   ],
   entryComponents: [
-    DashboardImageDialog
+    DashboardImageDialog,
+    FormPedidoComponent
   ],
   imports: [
     BrowserModule,

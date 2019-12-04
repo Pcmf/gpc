@@ -57,11 +57,9 @@
                                 <img [src]="preview" alt="" height="300px">
                             </div>
                         </form>
-
+                        <h1>{{newPedidoId}}</h1>
                         <!-- Painel para pedido iniciado -->
-                        <div *ngIf="pedidoIniciado">
-                            <app-form-pedido></app-form-pedido>
-                        </div>
+                        <app-form-pedido *ngIf="pedidoIniciado" [pedidoId]="newPedidoId"></app-form-pedido>
                         
                     </div>
                 </div>
