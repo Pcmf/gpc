@@ -30,7 +30,7 @@ export class DashboardComponent implements OnInit {
   preview: string;
   private filesize: number;
 
-  pedidoIniciado: false;
+  pedidoIniciado = false;
 
   constructor(
     private route: ActivatedRoute,
@@ -51,6 +51,13 @@ export class DashboardComponent implements OnInit {
         }
       }
     );
+  }
+
+  ngOnInit() {
+    const d = new Date();
+    this.year = d.getFullYear();
+    this.ano = d.getFullYear();
+    this.anos = [this.ano, this.ano + 1];
   }
 
   loadByYear(year) {
@@ -119,6 +126,24 @@ export class DashboardComponent implements OnInit {
 
   }
 
+  createPedido(form) {
+    const obj = {
+                  anoTema : form.anoTema,
+                  tema: form.tema,
+                  refCliente: form.refcliente,
+                  descricao: form.descricao,
+                  foto: this.preview
+                };
+
+    this.data.editData('pedidos/' + this.id, obj).subscribe(
+      resp => {
+        console.log(resp);
+        if (+resp > 0) {
+          this.pedidoIniciado = true;
+        }
+      }
+    );
+  }
 
 
 
@@ -134,13 +159,6 @@ export class DashboardComponent implements OnInit {
     dialogRef.afterClosed().subscribe(result => {
       console.log('The dialog was closed');
     });
-  }
-
-  ngOnInit() {
-    const d = new Date();
-    this.year = d.getFullYear();
-    this.ano = d.getFullYear();
-    this.anos = [this.ano, this.ano + 1];
   }
 
 }

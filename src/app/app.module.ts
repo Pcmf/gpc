@@ -15,6 +15,7 @@ import { AuthGuardService } from './Services/auth-guard.service';
 import { NavbarService } from './Services/navbar.service';
 import { HttpClientModule } from '@angular/common/http';
 import {NgxImageCompressService} from 'ngx-image-compress';
+import { FormPedidoComponent } from './Cliente/form-pedido/form-pedido.component';
 
 @NgModule({
   declarations: [
@@ -23,7 +24,8 @@ import {NgxImageCompressService} from 'ngx-image-compress';
     NavbarComponent,
     HomeComponent,
     DashboardComponent,
-    DashboardImageDialog
+    DashboardImageDialog,
+    FormPedidoComponent
   ],
   entryComponents: [
     DashboardImageDialog
