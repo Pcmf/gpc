@@ -13,7 +13,7 @@ export class FormPedidoComponent implements OnInit {
   modelos: any = [];
   FormPedidoColunas: string[] = ['refInterna', 'refCliente', 'nome', 'imagem'];
 
-  constructor(private data: DataService) {
+  ngOnInit() {
     console.log(this.pedidoId);
     this.data.getData('pedidos/' + this.pedidoId).subscribe(
       resp => {
@@ -23,11 +23,14 @@ export class FormPedidoComponent implements OnInit {
     this.data.getData('modelos/' + this.pedidoId).subscribe(
       respM => this.modelos = respM
     );
-
   }
 
-  ngOnInit() {
+  constructor(private data: DataService) {
     console.log(this.pedidoId);
+
+
   }
+
+
 
 }
