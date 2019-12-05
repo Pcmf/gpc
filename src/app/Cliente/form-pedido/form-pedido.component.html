@@ -1,14 +1,21 @@
 <mat-card>
+    <mat-card-content>
     <div class="mat-card-left">
         <ul>
-            <li>Tema:<span>{{pedido.tema}}</span></li>
-            <li>Cliente:<span>{{pedido.nomeCliente}}</span></li>
-            <li>Ref:<span>{{pedido.refinterna}}</span></li>
+            <li><span class="text-info">Tema:</span><span class="text-primary">{{pedido.tema}}</span></li>
+            <li><span class="text-info">Cliente:</span><span class="text-primary">{{pedido.nomeCliente}}</span></li>
+            <li><span class="text-info">Ref. Interna:</span><span class="text-primary">{{pedido.refinterna}}</span></li>
         </ul>
     </div>
     <div class="mat-card-right">
-        <img [src]="pedido.foto" height="100%" alt="">
+        <img [src]="pedido.foto" alt="">
     </div>
+    </mat-card-content>
+    <mat-card-footer>
+        <button mat-stroked-button color="primary" (click)="addModelo()">Adicionar Modelo</button>
+        <button mat-stroked-button color="warn" (click)="goBack()">Cancela</button>
+        <mat-icon size="lg" (click)="deletePedido()" matSuffix>delete</mat-icon>
+    </mat-card-footer>
 </mat-card>
 
 <!-- Linhas do pedido - modelos -->

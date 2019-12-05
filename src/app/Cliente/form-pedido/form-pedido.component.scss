@@ -1,4 +1,33 @@
-.mat-card-right{
+.mat-card{
+    height: 120px;
+}
+.mat-card-left{
+    width: 400px;
+    float: left;
+}
+ul{
+    list-style-type: none; 
+    display: inline; 
+    margin-left: 40px;
+}
+.text-info{
     width: 200px;
-    
+    font-size: large;
+    color: darkcyan;
+    text-transform: uppercase;
+}
+
+.text-primary{
+    font-size: large;
+    color: dodgerblue;
+    text-transform: capitalize;
+}
+
+.mat-card-right{
+    width: 400px;
+    max-height: 100px;
+    float: right;
+}
+.mat-card-right img{
+    max-height: 100px;
 }
