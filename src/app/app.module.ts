@@ -14,8 +14,8 @@ import { DataService } from './Services/data.service';
 import { AuthGuardService } from './Services/auth-guard.service';
 import { NavbarService } from './Services/navbar.service';
 import { HttpClientModule } from '@angular/common/http';
-import {NgxImageCompressService} from 'ngx-image-compress';
-import { FormPedidoComponent } from './Cliente/form-pedido/form-pedido.component';
+import { NgxImageCompressService} from 'ngx-image-compress';
+import { FormPedidoComponent, CreateModeloDialog } from './Cliente/form-pedido/form-pedido.component';
 
 @NgModule({
   declarations: [
@@ -25,11 +25,13 @@ import { FormPedidoComponent } from './Cliente/form-pedido/form-pedido.component
     HomeComponent,
     DashboardComponent,
     DashboardImageDialog,
-    FormPedidoComponent
+    FormPedidoComponent,
+    CreateModeloDialog
   ],
   entryComponents: [
     DashboardImageDialog,
-    FormPedidoComponent
+    FormPedidoComponent,
+    CreateModeloDialog
   ],
   imports: [
     BrowserModule,

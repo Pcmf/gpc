@@ -19,8 +19,9 @@
             <mat-tab label="Criar Pedido">
                 <div class="content">
                     <div class="mat-elevation-z8">
-                        <h2>Criar pedido</h2>
+                        
                         <!-- Form para criar o pedido -->
+                        <h2>Criar pedido</h2>
                         <form #f="ngForm" (submit)="createPedido(f.value)" class="formCreate" *ngIf="!pedidoIniciado">
                             <div class="formView">
                                 <mat-form-field class="short">

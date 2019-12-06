@@ -162,7 +162,6 @@ export class DashboardComponent implements OnInit {
 
 
   openDialog(ln): void {
-    console.log(ln);
     // tslint:disable-next-line: no-use-before-declare
     const dialogRef = this.dialog.open(DashboardImageDialog, {
       width: '60%',

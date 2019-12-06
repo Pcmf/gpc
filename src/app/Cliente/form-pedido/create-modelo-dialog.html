@@ -1,0 +1,75 @@
+<style>
+    .mat-dialog-container {
+        max-width: 850px;
+    }
+
+    .mat-dialog-content {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+    }
+
+    .mat-form-field {
+        width: 220px;
+        margin: 5px 40px;
+
+
+    }
+</style>
+
+<h2 mat-dialog-title>Criar Modelo</h2>
+<div class="mat-dialog-header">
+    <div class="header-left">
+        <h3>TEMA: {{pedido.tema}}</h3>
+        <button type="button" mat-raised-button (click)="fileInput.click()">Selecionar
+            Imagem</button>
+        <input hidden ngModel (change)="handleInputChange($event)" #fileInput type="file" name="imagem" id="file"
+            accept="image/jpeg, image/png">
+    </div>
+    <div class="header-right">
+        <img [src]="preview" alt="" height="200">
+    </div>
+
+</div>
+<!--  Formulario para criar tema -->
+<form #f="ngForm" (submit)="saveModelo(f.value)">
+    <div mat-dialog-content>
+        <!--  Selecionar Imagem -->
+
+        <mat-form-field>
+            <mat-label>Ref. Interna</mat-label>
+            <input matInput name="refInterna" ngModel required>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Ref. do Cliente <span class="text-small text-info">opcional</span></mat-label>
+            <input matInput name="refCliente" ngModel>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Artigo</mat-label>
+            <mat-select name="artigo" ngModel required>
+                <mat-option *ngFor="let a of artigos" [value]="a">{{a.nome}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Preço</mat-label>
+            <input matInput name="preco" ngModel>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Escala</mat-label>
+            <mat-select name="escala" ngModel required>
+                <mat-option *ngFor="let e of escalas" [value]="e">{{e.nome}}</mat-option>
+            </mat-select>
+        </mat-form-field>
+        <mat-form-field>
+            <mat-label>Descrição</mat-label>
+            <textarea matInput name="descricao" ngModel></textarea>
+        </mat-form-field>
+
+
+    </div>
+
+    <mat-dialog-actions>
+        <button mat-stroked-button color="accent">Guardar</button>
+        <button mat-stroked-button>Cancelar</button>
+    </mat-dialog-actions>
+</form>

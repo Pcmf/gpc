@@ -31,3 +31,21 @@ ul{
 .mat-card-right img{
     max-height: 100px;
 }
+
+
+.mat-dialog-container{
+    max-width: 850px;
+}
+
+.mat-dialog-content{
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+
+.mat-form-field{
+    width: 220px;
+    margin: 5px 40px;
+    
+
+}
