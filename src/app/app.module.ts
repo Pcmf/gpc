@@ -16,6 +16,8 @@ import { NavbarService } from './Services/navbar.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxImageCompressService} from 'ngx-image-compress';
 import { FormPedidoComponent, CreateModeloDialog } from './Cliente/form-pedido/form-pedido.component';
+import { LoadImageComponent } from './Utilities/load-image/load-image.component';
+import { LoadImageService } from './Services/load-image.service';
 
 @NgModule({
   declarations: [
@@ -26,12 +28,14 @@ import { FormPedidoComponent, CreateModeloDialog } from './Cliente/form-pedido/f
     DashboardComponent,
     DashboardImageDialog,
     FormPedidoComponent,
-    CreateModeloDialog
+    CreateModeloDialog,
+    LoadImageComponent
   ],
   entryComponents: [
     DashboardImageDialog,
     FormPedidoComponent,
-    CreateModeloDialog
+    CreateModeloDialog,
+    LoadImageComponent
   ],
   imports: [
     BrowserModule,
@@ -45,7 +49,8 @@ import { FormPedidoComponent, CreateModeloDialog } from './Cliente/form-pedido/f
     DataService,
     AuthGuardService,
     NavbarService,
-    NgxImageCompressService
+    NgxImageCompressService,
+    LoadImageService
   ],
   bootstrap: [AppComponent]
 })

@@ -21,10 +21,11 @@
 <div class="mat-dialog-header">
     <div class="header-left">
         <h3>TEMA: {{pedido.tema}}</h3>
-        <button type="button" mat-raised-button (click)="fileInput.click()">Selecionar
+<!--         <button type="button" mat-raised-button (click)="fileInput.click()">Selecionar
             Imagem</button>
         <input hidden ngModel (change)="handleInputChange($event)" #fileInput type="file" name="imagem" id="file"
-            accept="image/jpeg, image/png">
+            accept="image/jpeg, image/png"> -->
+        <app-load-image (imageB64)="receiveImage($event)"></app-load-image>
     </div>
     <div class="header-right">
         <img [src]="preview" alt="" height="200">
@@ -70,6 +71,6 @@
 
     <mat-dialog-actions>
         <button mat-stroked-button color="accent">Guardar</button>
-        <button mat-stroked-button>Cancelar</button>
+        <button mat-stroked-button (click)="onNoClick()">Cancelar</button>
     </mat-dialog-actions>
 </form>

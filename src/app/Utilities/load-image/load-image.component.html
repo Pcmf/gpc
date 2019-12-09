@@ -1,0 +1,4 @@
+<button type="button" mat-raised-button (click)="fileInput.click()">Selecionar
+    Imagem</button>
+<input hidden ngModel (change)="handleInputChange($event)" #fileInput type="file"
+    name="imagem" id="file" accept="image/jpeg, image/png">

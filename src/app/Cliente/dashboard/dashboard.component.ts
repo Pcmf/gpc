@@ -1,32 +1,28 @@
-import { Component, OnInit, Inject } from '@angular/core';
+import { Component, OnInit, Inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from 'src/app/Services/data.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { NgxImageCompressService } from 'ngx-image-compress';
-
+import { FormControl } from '@angular/forms';
 @Component({
   selector: 'app-dash-client',
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+
   private id: number;
   cliente: any = [];
   years = [2017, 2018, 2019, 2020, 2021, 2022, 2023, 2024, 2025, 2026, 2027, 2028, 2029, 2030];
-  /*   year: number;
-    anos: number [];
-    ano: number; */
   pedidosAberto: any = [];
   pedidosParaAprovacao: any = [];
   pedidosAprovados: any = [];
   pedidosProducao: any = [];
   pedidosFinalizados: any = [];
-  pedidos: any = []
+  pedidos: any = [];
+  tab: number;
 
   displayedColumns: string[] = ['refInterna', 'imagem', 'tema', 'dataPedido', 'dataSituacao'];
-
-  private filetype: string;
-  private filename: string;
   preview: string;
   private filesize: number;
 
@@ -36,14 +32,14 @@ export class DashboardComponent implements OnInit {
   year = this.d.getFullYear();
   ano = this.d.getFullYear();
   anos = [this.ano, this.ano + 1];
-
+  selected = new FormControl(1);
 
   constructor(
     private route: ActivatedRoute,
     private data: DataService,
     private dialog: MatDialog,
     private imageCompress: NgxImageCompressService
-  ) { }
+  ) {  }
 
   ngOnInit() {
     this.id = this.route.snapshot.params.id;
@@ -53,6 +49,7 @@ export class DashboardComponent implements OnInit {
           this.cliente = resp;
           console.table(this.cliente.nome);
           this.loadData(this.id, this.year);
+          setTimeout(() => this.selected.setValue(0), 800);
         } else {
           alert('Erro ao carregar cliente. Contacte suporte');
         }
@@ -92,7 +89,6 @@ export class DashboardComponent implements OnInit {
                           { nome: 'Pedidos em Produção', list: this.pedidosProducao },
                           { nome: 'Pedidos Concluidos', list: this.pedidosFinalizados }
                         ];
-                        console.log('Carregou?');
                       }
                     );
                   }
@@ -108,32 +104,15 @@ export class DashboardComponent implements OnInit {
 
   }
 
-
-  handleInputChange(e) {
-    const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
-    this.filetype = (file.type).substr((file.type).indexOf('/') + 1);
-    this.filename = file.name;
-    this.filesize = file.size;
-    const pattern2 = /image-*/;
-    const reader = new FileReader();
-
-    reader.onload = this._handleReaderLoaded.bind(this);
-    reader.readAsDataURL(file);
-
+  editarPedido(pid, tab) {
+    this.newPedidoId = pid;
+    this.tab = tab;
+    this.pedidoIniciado = true;
+    this.selected.setValue(5);
   }
-  _handleReaderLoaded(e) {
-    const reader = e.target;
-    if (this.filesize > 30000) {
-      this.imageCompress.compressFile(reader.result, 1, 50, 80).then(
-        resp => {
-          this.preview = resp;
-        }
 
-      );
-    } else {
-      this.preview = reader.result;
-    }
-
+  receiveImage(event) {
+    this.preview = event;
   }
 
   createPedido(form) {
@@ -144,23 +123,33 @@ export class DashboardComponent implements OnInit {
       descricao: form.descricao,
       foto: this.preview
     };
-
     this.data.editData('pedidos/' + this.id, obj).subscribe(
       resp => {
         if (+resp > 0) {
           this.newPedidoId = +resp;
           this.pedidoIniciado = true;
-          console.log('Novo pedido ' + this.newPedidoId);
+          this.preview = '';
           this.year = obj.anoTema;
           this.loadByYear(obj.anoTema);
+          this.editarPedido(this.newPedidoId, 4);
         }
       }
     );
   }
 
+  pedidoFechado(event) {
+    this.pedidoIniciado = event;
+  }
+  tabOrigem(event) {
+    console.log(event);
+    this.selected.setValue(event);
+  }
 
 
-
+/**
+ *
+ * Dialog
+ */
   openDialog(ln): void {
     // tslint:disable-next-line: no-use-before-declare
     const dialogRef = this.dialog.open(DashboardImageDialog, {

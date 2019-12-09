@@ -1,54 +1,59 @@
 <mat-card>
     <mat-card-content>
-    <div class="mat-card-left">
-        <ul>
-            <li><span class="text-info">Tema:</span><span class="text-primary">{{pedido.tema}}</span></li>
-            <li><span class="text-info">Cliente:</span><span class="text-primary">{{pedido.nomeCliente}}</span></li>
-            <li><span class="text-info">Ref. Interna:</span><span class="text-primary">{{pedido.refinterna}}</span></li>
-        </ul>
-    </div>
-    <div class="mat-card-right">
-        <img [src]="pedido.foto" alt="">
-    </div>
+        <div class="mat-card-left">
+            <ul>
+                <li><span class="text-info">Tema:</span><span class="text-primary">{{pedido.tema}}</span></li>
+                <li><span class="text-info">Cliente:</span><span class="text-primary">{{pedido.nomeCliente}}</span></li>
+                <li><span class="text-info">Ref. Interna:</span><span class="text-primary">{{pedido.refinterna}}</span>
+                </li>
+            </ul>
+        </div>
+        <div class="mat-card-right">
+            <img [src]="pedido.foto" alt="" (click)="fileInput.click()">
+            <input hidden ngModel (change)="openLoadImage($event)" #fileInput type="file"
+                    name="imagem" id="file" accept="image/jpeg, image/png">
+        </div>
     </mat-card-content>
     <mat-card-footer>
         <button mat-stroked-button color="primary" (click)="openModeloDialog()">Adicionar Modelo</button>
-        <button mat-stroked-button color="warn" (click)="goBack()">Cancela</button>
+        <button mat-stroked-button color="warn" (click)="cancelarCriar()">Cancela</button>
         <mat-icon size="lg" (click)="deletePedido()" matSuffix>delete</mat-icon>
     </mat-card-footer>
 </mat-card>
 
 <!-- Linhas do pedido - modelos -->
-<mat-table [dataSource]="modelos" class="mat-elevation-z8">
-    <!-- Position Column -->
-    <ng-container matColumnDef="refInterna">
-        <mat-header-cell *matHeaderCellDef> Ref. Interna </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-            <a [routerLink]="['/detPedido', element.id]"> {{element.refInterna}}</a> </mat-cell>
-    </ng-container>
+<div class="content">
+    <div class="mat-elevation-z8">
+        <mat-table [dataSource]="modelos">
+            <!-- Ref Interna Column -->
+            <ng-container matColumnDef="refinterna">
+                <mat-header-cell *matHeaderCellDef> Ref. Interna </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <a [routerLink]="['/detPedido', element.id]"> {{element.refinterna}}</a> </mat-cell>
+            </ng-container>
 
-    <!-- Symbol Column -->
-    <ng-container matColumnDef="imagem">
-        <mat-header-cell *matHeaderCellDef> Imagem </mat-header-cell>
-        <mat-cell *matCellDef="let element">
-            <img src="{{element.foto}}" alt="" height="60px" (click)="openDialog(element)">
-        </mat-cell>
-    </ng-container>
+            <!-- Ref Cliente Column -->
+            <ng-container matColumnDef="refcliente">
+                <mat-header-cell *matHeaderCellDef> Ref. Cliente </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.refcliente}} </mat-cell>
+            </ng-container>
 
-    <!-- Name Column -->
-    <ng-container matColumnDef="nome">
-        <mat-header-cell *matHeaderCellDef> Artigo </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.nome}} </mat-cell>
-    </ng-container>
+            <!-- Imagem Column -->
+            <ng-container matColumnDef="imagem">
+                <mat-header-cell *matHeaderCellDef> Imagem </mat-header-cell>
+                <mat-cell *matCellDef="let element">
+                    <img src="{{element.foto}}" alt="" height="60px" (click)="openDialog(element)">
+                </mat-cell>
+            </ng-container>
 
-    <!-- Weight Column -->
-    <ng-container matColumnDef="refCliente">
-        <mat-header-cell *matHeaderCellDef> Ref. Cliente </mat-header-cell>
-        <mat-cell *matCellDef="let element"> {{element.refCliente}} </mat-cell>
-    </ng-container>
+            <!-- Artigo Column -->
+            <ng-container matColumnDef="nome">
+                <mat-header-cell *matHeaderCellDef> Artigo </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.nome}} </mat-cell>
+            </ng-container>
 
-
-
-    <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-    <mat-row *matRowDef="let row; columns: FormPedidoColunas;"></mat-row>
-</mat-table>
+            <mat-header-row *matHeaderRowDef="FormPedidoColunas"></mat-header-row>
+            <mat-row *matRowDef="let row; columns: FormPedidoColunas;"></mat-row>
+        </mat-table>
+    </div>
+</div>
