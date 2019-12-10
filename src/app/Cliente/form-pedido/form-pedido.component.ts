@@ -3,8 +3,6 @@ import { DataService } from 'src/app/Services/data.service';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import { NgxImageCompressService } from 'ngx-image-compress';
 import { ActivatedRoute } from '@angular/router';
-import { LoadImageService } from '../../Services/load-image.service';
-import { timeout } from 'q';
 
 @Component({
   selector: 'app-form-pedido',
@@ -20,13 +18,13 @@ export class FormPedidoComponent implements OnInit {
   modelos: any = [];
   FormPedidoColunas: string[] = ['refinterna', 'refcliente', 'nome', 'imagem'];
   id: number;
+  filesize: number;
 
 
 
   constructor(private data: DataService,
               private dialog: MatDialog,
               private route: ActivatedRoute,
-              private loadImageService: LoadImageService
               ) {
     console.log(this.pedidoId);
     this.pedidoId = this.route.snapshot.params.id;
@@ -45,16 +43,28 @@ export class FormPedidoComponent implements OnInit {
     );
   }
 
-  openLoadImage(event) {
-    const img = this.loadImageService.handleInputChange(event);
-    setTimeout(() => console.log(img), 2000);
-
+  editarModelo(mod) {
+    // tslint:disable-next-line: no-use-before-declare
+    const dialogRef = this.dialog.open(CreateModeloDialog, {
+      data: {pedido: this.pedido, modelo: mod}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.data.getData('modelos/' + this.pedidoId).subscribe(
+        resp => this.modelos = resp
+      );
+    });
   }
+
 
   openModeloDialog() {
     // tslint:disable-next-line: no-use-before-declare
-    this.dialog.open(CreateModeloDialog, {
-      data: this.pedido
+    const dialogRef = this.dialog.open(CreateModeloDialog, {
+      data: {pedido: this.pedido, modelo: []}
+    });
+    dialogRef.afterClosed().subscribe(result => {
+      this.data.getData('modelos/' + this.pedidoId).subscribe(
+        resp => this.modelos = resp
+      );
     });
   }
 
@@ -78,18 +88,15 @@ export class FormPedidoComponent implements OnInit {
 })
 // tslint:disable-next-line:component-class-suffix
 export class CreateModeloDialog {
-  private filetype: string;
-  private filename: string;
   preview: string;
-  private filesize: number;
   artigos: any = [];
   escalas: any = [];
 
   constructor(public dialogRef: MatDialogRef<any>,
-              @Inject(MAT_DIALOG_DATA) public pedido: any[],
-              private data: DataService,
-              private imageCompress: NgxImageCompressService
+              @Inject(MAT_DIALOG_DATA) public dados,
+              private data: DataService
   ) {
+    console.log(dados);
     this.data.getData('artigos').subscribe(
       resp => this.artigos = resp
     );
@@ -103,10 +110,11 @@ export class CreateModeloDialog {
   }
 
   saveModelo(form) {
-    const obj = {pedido: this.pedido, formulario: form, foto: this.preview }
+    const obj = {pedido: this.dados.pedido, formulario: form, foto: this.preview }
     this.data.saveData('modelos', obj).subscribe(
       resp => {
-        console.log(resp);
+        form.foto = this.preview;
+        this.dialogRef.close(form);
       }
     );
   }

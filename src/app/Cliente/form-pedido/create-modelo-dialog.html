@@ -12,19 +12,13 @@
     .mat-form-field {
         width: 220px;
         margin: 5px 40px;
-
-
     }
 </style>
 
 <h2 mat-dialog-title>Criar Modelo</h2>
 <div class="mat-dialog-header">
     <div class="header-left">
-        <h3>TEMA: {{pedido.tema}}</h3>
-<!--         <button type="button" mat-raised-button (click)="fileInput.click()">Selecionar
-            Imagem</button>
-        <input hidden ngModel (change)="handleInputChange($event)" #fileInput type="file" name="imagem" id="file"
-            accept="image/jpeg, image/png"> -->
+        <h3>TEMA: {{dados.pedido.tema}}</h3>
         <app-load-image (imageB64)="receiveImage($event)"></app-load-image>
     </div>
     <div class="header-right">
@@ -35,8 +29,6 @@
 <!--  Formulario para criar tema -->
 <form #f="ngForm" (submit)="saveModelo(f.value)">
     <div mat-dialog-content>
-        <!--  Selecionar Imagem -->
-
         <mat-form-field>
             <mat-label>Ref. Interna</mat-label>
             <input matInput name="refInterna" ngModel required>

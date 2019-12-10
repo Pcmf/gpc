@@ -13,12 +13,12 @@ export class LoadImageService {
     const file = e.dataTransfer ? e.dataTransfer.files[0] : e.target.files[0];
     this.filesize = file.size;
     const pattern2 = /image-*/;
-    let reader = new FileReader();
-/*     reader.onload = this._handleReaderLoaded.bind(this);
+    const reader = new FileReader();
+    reader.onload = this._handleReaderLoaded.bind(this);
     reader.readAsDataURL(file);
   }
-  _handleReaderLoaded(e) { */
-    reader = e.target;
+  _handleReaderLoaded(e) {
+    const reader = e.target;
     if (this.filesize > 30000) {
       this.imageCompress.compressFile(reader.result, 1, 50, 80).then(
         (resp: any) => {

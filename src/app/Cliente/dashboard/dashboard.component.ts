@@ -24,7 +24,6 @@ export class DashboardComponent implements OnInit {
 
   displayedColumns: string[] = ['refInterna', 'imagem', 'tema', 'dataPedido', 'dataSituacao'];
   preview: string;
-  private filesize: number;
 
   pedidoIniciado = false;
   newPedidoId = 0;
@@ -37,8 +36,7 @@ export class DashboardComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private data: DataService,
-    private dialog: MatDialog,
-    private imageCompress: NgxImageCompressService
+    private dialog: MatDialog
   ) {  }
 
   ngOnInit() {
@@ -154,7 +152,8 @@ export class DashboardComponent implements OnInit {
     // tslint:disable-next-line: no-use-before-declare
     const dialogRef = this.dialog.open(DashboardImageDialog, {
       width: '60%',
-      data: { tema: ln.tema, foto: ln.foto }
+      data: ln
+     // data: { tema: ln.tema, foto: ln.foto }
     });
 
     dialogRef.afterClosed().subscribe(result => {
@@ -164,6 +163,8 @@ export class DashboardComponent implements OnInit {
 
 }
 
+
+
 @Component({
   // tslint:disable-next-line:component-selector
   selector: 'dashboard-image-dialog',
@@ -171,13 +172,22 @@ export class DashboardComponent implements OnInit {
 })
 // tslint:disable-next-line:component-class-suffix
 export class DashboardImageDialog {
-
   constructor(
     public dialogRef: MatDialogRef<DashboardImageDialog>,
-    @Inject(MAT_DIALOG_DATA) public data: any[]) { }
+    @Inject(MAT_DIALOG_DATA) public data,
+    private dataService: DataService
+  ) { }
 
   onNoClick(): void {
     this.dialogRef.close();
+  }
+
+  receiveImage(event) {
+    this.data.foto = event;
+    console.log('atualizar imagem?');
+    this.dataService.editData('pedido/' + this.data.id, this.data ).subscribe(
+      resp => console.log(resp)
+    );
   }
 
 }

@@ -9,9 +9,8 @@
             </ul>
         </div>
         <div class="mat-card-right">
-            <img [src]="pedido.foto" alt="" (click)="fileInput.click()">
-            <input hidden ngModel (change)="openLoadImage($event)" #fileInput type="file"
-                    name="imagem" id="file" accept="image/jpeg, image/png">
+            <img [src]="pedido.foto" alt="" (click)="fileInput2.click()">
+
         </div>
     </mat-card-content>
     <mat-card-footer>
@@ -28,8 +27,9 @@
             <!-- Ref Interna Column -->
             <ng-container matColumnDef="refinterna">
                 <mat-header-cell *matHeaderCellDef> Ref. Interna </mat-header-cell>
-                <mat-cell *matCellDef="let element">
-                    <a [routerLink]="['/detPedido', element.id]"> {{element.refinterna}}</a> </mat-cell>
+                <mat-cell *matCellDef="let element" (click)="editarModelo(element)">
+                    {{element.refinterna}}
+                </mat-cell>
             </ng-container>
 
             <!-- Ref Cliente Column -->
