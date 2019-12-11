@@ -2,7 +2,6 @@ import { Component, OnInit, Inject, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from 'src/app/Services/data.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { NgxImageCompressService } from 'ngx-image-compress';
 import { FormControl } from '@angular/forms';
 @Component({
   selector: 'app-dash-client',

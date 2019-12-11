@@ -1,7 +1,6 @@
 import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
 import { DataService } from 'src/app/Services/data.service';
 import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import { NgxImageCompressService } from 'ngx-image-compress';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -20,15 +19,12 @@ export class FormPedidoComponent implements OnInit {
   id: number;
   filesize: number;
 
-
-
-  constructor(private data: DataService,
+  constructor(
+              private data: DataService,
               private dialog: MatDialog,
               private route: ActivatedRoute,
               ) {
-    console.log(this.pedidoId);
     this.pedidoId = this.route.snapshot.params.id;
-
   }
 
   ngOnInit() {
@@ -91,12 +87,21 @@ export class CreateModeloDialog {
   preview: string;
   artigos: any = [];
   escalas: any = [];
+  modelo: any = [];
+  criar = true;
 
   constructor(public dialogRef: MatDialogRef<any>,
               @Inject(MAT_DIALOG_DATA) public dados,
               private data: DataService
   ) {
-    console.log(dados);
+    if (dados.modelo.length > 0) {
+          console.log(this.criar);
+          this.criar = false;
+          this.modelo = dados.modelo;
+          this.preview = this.modelo.foto;
+          console.table(this.modelo);
+    }
+
     this.data.getData('artigos').subscribe(
       resp => this.artigos = resp
     );
@@ -110,13 +115,27 @@ export class CreateModeloDialog {
   }
 
   saveModelo(form) {
-    const obj = {pedido: this.dados.pedido, formulario: form, foto: this.preview }
-    this.data.saveData('modelos', obj).subscribe(
-      resp => {
-        form.foto = this.preview;
-        this.dialogRef.close(form);
-      }
-    );
+    console.log('Criar: ' + this.criar);
+    if (this.criar) {
+      const obj = {pedido: this.dados.pedido, formulario: form, foto: this.preview };
+      this.data.saveData('modelos', obj).subscribe(
+        resp => {
+          form.foto = this.preview;
+          this.dialogRef.close(form);
+        }
+      );
+    } else {
+      // Editar Modelo
+      const obj = {pedido: this.dados.pedido, formulario: form, foto: this.preview};
+      this.data.editData('modelo/' + this.modelo.id, obj).subscribe(
+        resp => {
+          console.log(resp);
+          form.foto = this.preview;
+          this.dialogRef.close(form);
+        }
+      );
+    }
+
   }
   // Fechar o Dialog
   onNoClick(): void {
@@ -124,3 +143,4 @@ export class CreateModeloDialog {
   }
 
 }
+

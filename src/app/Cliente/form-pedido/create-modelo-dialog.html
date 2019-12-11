@@ -31,31 +31,34 @@
     <div mat-dialog-content>
         <mat-form-field>
             <mat-label>Ref. Interna</mat-label>
-            <input matInput name="refInterna" ngModel required>
+            <input matInput name="refInterna" [ngModel]="modelo.refinterna" required>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Ref. do Cliente <span class="text-small text-info">opcional</span></mat-label>
-            <input matInput name="refCliente" ngModel>
+            <input matInput name="refCliente" [ngModel]="modelo.refcliente">
         </mat-form-field>
         <mat-form-field>
             <mat-label>Artigo</mat-label>
-            <mat-select name="artigo" ngModel required>
-                <mat-option *ngFor="let a of artigos" [value]="a">{{a.nome}}</mat-option>
+            <mat-select name="artigo" [ngModel]="modelo.artigo" required>
+                <mat-option *ngFor="let a of artigos" [value]="a.id" 
+                [attr.selected]="a.id == modelo.artigo">{{a.nome}}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Preço</mat-label>
-            <input matInput name="preco" ngModel>
+            <input matInput name="preco" [ngModel]="modelo.preco">
         </mat-form-field>
         <mat-form-field>
             <mat-label>Escala</mat-label>
-            <mat-select name="escala" ngModel required>
-                <mat-option *ngFor="let e of escalas" [value]="e">{{e.nome}}</mat-option>
+            <mat-select name="escala" [ngModel]="modelo.escala" required>
+                    <mat-option *ngFor="let e of escalas" [value]="e.id"
+                    [attr.selected]="e.id == modelo.escala"
+                    >{{e.nome}}</mat-option>
             </mat-select>
         </mat-form-field>
         <mat-form-field>
             <mat-label>Descrição</mat-label>
-            <textarea matInput name="descricao" ngModel></textarea>
+            <textarea matInput name="descricao" [ngModel]="modelo.descricao"></textarea>
         </mat-form-field>
 
 
