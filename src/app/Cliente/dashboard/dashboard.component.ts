@@ -20,6 +20,7 @@ export class DashboardComponent implements OnInit {
   pedidosFinalizados: any = [];
   pedidos: any = [];
   tab: number;
+  autoRefInterna = '';
 
   displayedColumns: string[] = ['refInterna', 'imagem', 'tema', 'dataPedido', 'dataSituacao'];
   preview: string;
@@ -99,6 +100,12 @@ export class DashboardComponent implements OnInit {
 
 
 
+  }
+
+  getRefInterna(event) {
+    this.data.getData('pedido/ref/' + this.id + '/' + event.value).subscribe(
+      (resp: string) => this.autoRefInterna = resp
+    );
   }
 
   editarPedido(pid, tab) {

@@ -4,7 +4,7 @@
             <ul>
                 <li><span class="text-info">Tema:</span><span class="text-primary">{{pedido.tema}}</span></li>
                 <li><span class="text-info">Cliente:</span><span class="text-primary">{{pedido.nomeCliente}}</span></li>
-                <li><span class="text-info">Ref. Interna:</span><span class="text-primary">{{pedido.refinterna}}</span>
+                <li><span class="text-info">Ref. Interna:</span><span class="text-primary">{{pedido.refInterna}}</span>
                 </li>
             </ul>
         </div>
@@ -14,7 +14,7 @@
         </div>
     </mat-card-content>
     <mat-card-footer>
-        <button mat-stroked-button color="primary" (click)="openModeloDialog()">Adicionar Modelo</button>
+        <button mat-stroked-button color="primary" (click)="addModeloDialog()">Adicionar Modelo</button>
         <button mat-stroked-button color="warn" (click)="cancelarCriar()">Cancela</button>
         <mat-icon size="lg" (click)="deletePedido()" matSuffix>delete</mat-icon>
     </mat-card-footer>

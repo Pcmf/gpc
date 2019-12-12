@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
 import { DataService } from 'src/app/Services/data.service';
-import {MatDialog, MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -20,10 +20,10 @@ export class FormPedidoComponent implements OnInit {
   filesize: number;
 
   constructor(
-              private data: DataService,
-              private dialog: MatDialog,
-              private route: ActivatedRoute,
-              ) {
+    private data: DataService,
+    private dialog: MatDialog,
+    private route: ActivatedRoute,
+  ) {
     this.pedidoId = this.route.snapshot.params.id;
   }
 
@@ -42,7 +42,7 @@ export class FormPedidoComponent implements OnInit {
   editarModelo(mod) {
     // tslint:disable-next-line: no-use-before-declare
     const dialogRef = this.dialog.open(CreateModeloDialog, {
-      data: {pedido: this.pedido, modelo: mod}
+      data: { pedido: this.pedido, modelo: mod }
     });
     dialogRef.afterClosed().subscribe(result => {
       this.data.getData('modelos/' + this.pedidoId).subscribe(
@@ -52,10 +52,10 @@ export class FormPedidoComponent implements OnInit {
   }
 
 
-  openModeloDialog() {
+  addModeloDialog() {
     // tslint:disable-next-line: no-use-before-declare
     const dialogRef = this.dialog.open(CreateModeloDialog, {
-      data: {pedido: this.pedido, modelo: []}
+      data: { pedido: this.pedido, modelo: [], create: true }
     });
     dialogRef.afterClosed().subscribe(result => {
       this.data.getData('modelos/' + this.pedidoId).subscribe(
@@ -88,18 +88,25 @@ export class CreateModeloDialog {
   artigos: any = [];
   escalas: any = [];
   modelo: any = [];
-  criar = true;
+  autoRefInterna = '';
 
-  constructor(public dialogRef: MatDialogRef<any>,
-              @Inject(MAT_DIALOG_DATA) public dados,
-              private data: DataService
+  constructor(
+    public dialogRef: MatDialogRef<any>,
+    @Inject(MAT_DIALOG_DATA) public dados,
+    private data: DataService
   ) {
-    if (dados.modelo.length > 0) {
-          console.log(this.criar);
-          this.criar = false;
-          this.modelo = dados.modelo;
-          this.preview = this.modelo.foto;
-          console.table(this.modelo);
+
+    if (!dados.create) {
+      console.log(dados.create);
+      this.modelo = dados.modelo;
+      this.preview = this.modelo.foto;
+      console.table(this.modelo);
+    } else {
+      // obter refInterna
+      console.log(dados.create);
+      this.data.getData('modelos/ref/' + dados.pedido.id).subscribe(
+        resp => this.modelo.refinterna = resp
+      );
     }
 
     this.data.getData('artigos').subscribe(
@@ -115,9 +122,8 @@ export class CreateModeloDialog {
   }
 
   saveModelo(form) {
-    console.log('Criar: ' + this.criar);
-    if (this.criar) {
-      const obj = {pedido: this.dados.pedido, formulario: form, foto: this.preview };
+    if (this.dados.create) {
+      const obj = { pedido: this.dados.pedido, formulario: form, foto: this.preview };
       this.data.saveData('modelos', obj).subscribe(
         resp => {
           form.foto = this.preview;
@@ -126,7 +132,7 @@ export class CreateModeloDialog {
       );
     } else {
       // Editar Modelo
-      const obj = {pedido: this.dados.pedido, formulario: form, foto: this.preview};
+      const obj = { pedido: this.dados.pedido, formulario: form, foto: this.preview };
       this.data.editData('modelo/' + this.modelo.id, obj).subscribe(
         resp => {
           console.log(resp);

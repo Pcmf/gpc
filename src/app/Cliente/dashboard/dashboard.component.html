@@ -27,7 +27,7 @@
                             <ng-container matColumnDef="refInterna">
                                 <mat-header-cell *matHeaderCellDef> Ref. Interna </mat-header-cell>
                                 <mat-cell *matCellDef="let element">
-                                    <span (click)="editarPedido(element.id, i)"> {{element.refinterna}}</span> </mat-cell>
+                                    <span (click)="editarPedido(element.id, i)"> {{element.refInterna}}</span> </mat-cell>
                             </ng-container>
 
                             <!-- Symbol Column -->
@@ -62,18 +62,17 @@
                     </div>
                 </div>
             </mat-tab>
-
+            <!-- CRIAR PEDIDO -->
             <mat-tab label="Criar Pedido">
                 <div class="content">
                     <div class="mat-elevation-z8">
-                        
                         <!-- Form para criar o pedido -->
                         <h2>Criar pedido</h2>
                         <form #f="ngForm" (submit)="createPedido(f.value)" class="formCreate" *ngIf="!pedidoIniciado">
                             <div class="formView">
                                 <mat-form-field class="short">
                                     <mat-label>Ano</mat-label>
-                                    <mat-select #ano name="anoTema" ngModel required>
+                                    <mat-select #ano name="anoTema" ngModel required (selectionChange)="getRefInterna($event)">
                                         <mat-option *ngFor="let a of anos" [value]="a">
                                             {{a}}
                                         </mat-option>
@@ -82,6 +81,10 @@
                                 <mat-form-field class="normal">
                                     <mat-label>Nome do Tema</mat-label>
                                     <input matInput placeholder="Tema" name="tema" ngModel required>
+                                </mat-form-field>
+                                <mat-form-field class="normal">
+                                        <mat-label>Referência do Interna</mat-label>
+                                        <input matInput placeholder="Referência Interna" name="refInterna" [ngModel]="autoRefInterna">
                                 </mat-form-field>
                                 <mat-form-field class="normal">
                                     <mat-label>Referência do Cliente</mat-label>
