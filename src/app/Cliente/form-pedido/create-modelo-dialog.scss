@@ -1,0 +1,43 @@
+h2{
+    text-align: center;
+    color: teal;
+}
+.mat-dialog-content {
+    width: 90%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-around;
+}
+.mat-dialog-header{
+    width: 94%;
+    margin: auto;
+    padding: 1.5rem;
+    border: rgba(0,0,0,0.06) thin inset;
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 10px;
+}
+.mat-dialog-header__left{
+    width: 40%;
+    height: 100%;
+}
+.mat-dialog-header__right{
+    width: 60%;
+    height: 100%;
+}
+
+.mat-form{
+    width: 90%;
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.mat-form-field {
+    width: 220px;
+    margin: 5px 40px;
+}
+.text-small{
+    font-size: .7rem;
+    color: teal;
+}

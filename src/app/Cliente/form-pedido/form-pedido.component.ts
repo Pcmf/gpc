@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular
 import { DataService } from 'src/app/Services/data.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { element } from 'protractor';
 
 @Component({
   selector: 'app-form-pedido',
@@ -81,10 +82,12 @@ export class FormPedidoComponent implements OnInit {
   // tslint:disable-next-line:component-selector
   selector: 'create-modelo-dialog',
   templateUrl: 'create-modelo-dialog.html',
+  styleUrls: ['create-modelo-dialog.scss']
 })
 // tslint:disable-next-line:component-class-suffix
 export class CreateModeloDialog {
   preview: string;
+  images: any = [];
   artigos: any = [];
   escalas: any = [];
   modelo: any = [];
@@ -97,16 +100,20 @@ export class CreateModeloDialog {
   ) {
 
     if (!dados.create) {
-      console.log(dados.create);
       this.modelo = dados.modelo;
       this.preview = this.modelo.foto;
-      console.table(this.modelo);
+      this.data.getData('modelos/fotos/' + this.modelo.id).subscribe(
+        // tslint:disable-next-line:no-shadowed-variable
+        (resp: any[]) => resp.map((element) => {
+          return this.images.push(element.foto);
+        })
+      );
     } else {
       // obter refInterna
-      console.log(dados.create);
       this.data.getData('modelos/ref/' + dados.pedido.id).subscribe(
         resp => this.modelo.refinterna = resp
       );
+
     }
 
     this.data.getData('artigos').subscribe(
@@ -121,13 +128,28 @@ export class CreateModeloDialog {
     this.preview = event;
   }
 
+  receiveOtherImages(event) {
+    this.images.push(event);
+    const img = [event];
+    if (this.modelo.id) {
+      this.data.editData('modelos/fotos/' + this.modelo.id, img).subscribe(
+        resp => console.log(resp)
+      );
+    }
+  }
+
   saveModelo(form) {
     if (this.dados.create) {
       const obj = { pedido: this.dados.pedido, formulario: form, foto: this.preview };
       this.data.saveData('modelos', obj).subscribe(
         resp => {
-          form.foto = this.preview;
-          this.dialogRef.close(form);
+          this.data.editData('modelos/fotos/' + +resp, this.images).subscribe(
+            res => {
+              console.log(res);
+              form.foto = this.preview;
+              this.dialogRef.close(form);
+            }
+          );
         }
       );
     } else {
