@@ -26,8 +26,9 @@
                             <!-- Position Column -->
                             <ng-container matColumnDef="refInterna">
                                 <mat-header-cell *matHeaderCellDef> Ref. Interna </mat-header-cell>
-                                <mat-cell *matCellDef="let element">
-                                    <span (click)="editarPedido(element.id, i)"> {{element.refInterna}}</span> </mat-cell>
+                                <mat-cell *matCellDef="let element" (click)="editarPedido(element.id, i)">
+                                    <strong> {{element.refInterna}}</strong> 
+                                </mat-cell>
                             </ng-container>
 
                             <!-- Symbol Column -->
@@ -41,18 +42,18 @@
                             <!-- Name Column -->
                             <ng-container matColumnDef="tema">
                                 <mat-header-cell *matHeaderCellDef> Tema </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.tema}} </mat-cell>
+                                <mat-cell *matCellDef="let element" (click)="editarPedido(element.id, i)"> {{element.tema}} </mat-cell>
                             </ng-container>
 
                             <!-- Weight Column -->
                             <ng-container matColumnDef="dataPedido">
-                                <mat-header-cell *matHeaderCellDef> Data </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.dataPedido}} </mat-cell>
+                                <mat-header-cell *matHeaderCellDef> Data do Pedido</mat-header-cell>
+                                <mat-cell *matCellDef="let element" (click)="editarPedido(element.id, i)"> {{element.dataPedido}} </mat-cell>
                             </ng-container>
                             <!-- Data Status Column -->
                             <ng-container matColumnDef="dataSituacao">
                                 <mat-header-cell *matHeaderCellDef> Data Status </mat-header-cell>
-                                <mat-cell *matCellDef="let element"> {{element.dataSituacao}} </mat-cell>
+                                <mat-cell *matCellDef="let element" (click)="editarPedido(element.id, i)"> {{element.dataSituacao}} </mat-cell>
                             </ng-container>
 
 
@@ -62,12 +63,16 @@
                     </div>
                 </div>
             </mat-tab>
+            
             <!-- CRIAR PEDIDO -->
             <mat-tab label="Criar Pedido">
                 <div class="content">
                     <div class="mat-elevation-z8">
                         <!-- Form para criar o pedido -->
                         <h2>Criar pedido</h2>
+                        <mat-card  *ngIf="pedidoIniciado">
+                            <mat-card-title>Tem de fechar o pedido que está a editar para poder criar um novo.</mat-card-title>
+                        </mat-card>
                         <form #f="ngForm" (submit)="createPedido(f.value)" class="formCreate" *ngIf="!pedidoIniciado">
                             <div class="formView">
                                 <mat-form-field class="short">
@@ -110,7 +115,7 @@
                 </div>
             </mat-tab>
 
-            <mat-tab label="Editar Pedido">
+            <mat-tab label="Editar Pedido" >
                 <div class="content">
                     <div class="mat-elevation-z8">
                         
@@ -119,7 +124,8 @@
                             [pedidoId]="newPedidoId"
                             [tab]="tab" 
                             (pedidoIniciado)="pedidoFechado($event)"
-                            (tabOrigem)="tabOrigem($event)">
+                            (tabOrigem)="tabOrigem($event)"
+                            (reload)="reload()">
                         </app-form-pedido>
                         
                     </div>

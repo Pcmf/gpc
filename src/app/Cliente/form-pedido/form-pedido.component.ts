@@ -2,7 +2,6 @@ import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular
 import { DataService } from 'src/app/Services/data.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
-import { element } from 'protractor';
 
 @Component({
   selector: 'app-form-pedido',
@@ -14,9 +13,10 @@ export class FormPedidoComponent implements OnInit {
   @Input() tab: number;
   @Output() pedidoIniciado = new EventEmitter<boolean>();
   @Output() tabOrigem = new EventEmitter<number>();
+  @Output() reload = new EventEmitter<boolean>();
   pedido: any = [];
   modelos: any = [];
-  FormPedidoColunas: string[] = ['refinterna', 'refcliente', 'nome', 'imagem'];
+  FormPedidoColunas: string[] = ['refinterna', 'refcliente', 'nome', 'imagem', 'star'];
   id: number;
   filesize: number;
 
@@ -29,14 +29,26 @@ export class FormPedidoComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log(this.pedidoId);
     this.data.getData('pedido/' + this.pedidoId).subscribe(
       resp => {
         this.pedido = resp;
       }
     );
+    this.getModelos();
+  }
+
+  private getModelos() {
     this.data.getData('modelos/' + this.pedidoId).subscribe(
       respM => this.modelos = respM
+    );
+  }
+
+  editPedido(pedido) {
+    this.data.editData('pedido/' + pedido.id, pedido).subscribe(
+      resp => {
+        console.log(resp);
+        this.reload.emit(true);
+      }
     );
   }
 
@@ -46,9 +58,7 @@ export class FormPedidoComponent implements OnInit {
       data: { pedido: this.pedido, modelo: mod }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.data.getData('modelos/' + this.pedidoId).subscribe(
-        resp => this.modelos = resp
-      );
+        this.getModelos();
     });
   }
 
@@ -59,22 +69,41 @@ export class FormPedidoComponent implements OnInit {
       data: { pedido: this.pedido, modelo: [], create: true }
     });
     dialogRef.afterClosed().subscribe(result => {
-      this.data.getData('modelos/' + this.pedidoId).subscribe(
-        resp => this.modelos = resp
-      );
+      this.getModelos();
     });
   }
 
-  cancelarCriar() {
+  sair() {
     this.pedidoIniciado.emit(false);
     this.tabOrigem.emit(this.tab);
   }
 
-  deletePedido() {
-    alert('Apagar pedido e modelos');
+  deletePedido(pedido) {
+    if (confirm('Vai eleminar este tema e todos os modelos. Confirma?')) {
+        this.data.deleteData('pedido/' + pedido.id).subscribe(
+          resp => {
+            console.log(resp);
+            this.reload.emit(true);
+            this.pedidoIniciado.emit(false);
+            this.tabOrigem.emit(this.tab);
+          }
+        );
+    }
   }
 
+
+  deleteModelo(modelo) {
+    if (confirm('Vai eleminar este modelo. Confirma?')) {
+      this.data.deleteData('modelo/' + modelo.id).subscribe(
+        resp => {
+          this.getModelos();
+        }
+      );
+    }
 }
+
+}
+
 /**
  * Dialog para criar modelo
  */
@@ -163,8 +192,10 @@ export class CreateModeloDialog {
         }
       );
     }
-
   }
+
+
+
   // Fechar o Dialog
   onNoClick(): void {
     this.dialogRef.close();

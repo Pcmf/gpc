@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit {
   tab: number;
   autoRefInterna = '';
 
-  displayedColumns: string[] = ['refInterna', 'imagem', 'tema', 'dataPedido', 'dataSituacao'];
+  displayedColumns: string[] = ['imagem', 'refInterna', 'tema',  'dataPedido', 'dataSituacao'];
   preview: string;
 
   pedidoIniciado = false;
@@ -83,6 +83,7 @@ export class DashboardComponent implements OnInit {
                         this.pedidosFinalizados = resp5;
                         this.pedidos = [
                           { nome: 'Pedidos em Aberto', list: this.pedidosAberto },
+                          { nome: 'Pedidos para Aprovação', list: this.pedidosParaAprovacao },
                           { nome: 'Pedidos Aprovados', list: this.pedidosAprovados },
                           { nome: 'Pedidos em Produção', list: this.pedidosProducao },
                           { nome: 'Pedidos Concluidos', list: this.pedidosFinalizados }
@@ -97,9 +98,10 @@ export class DashboardComponent implements OnInit {
         );
       }
     );
+  }
 
-
-
+  reload(){
+    this.loadData(this.id, this.year);
   }
 
   getRefInterna(event) {
@@ -109,10 +111,11 @@ export class DashboardComponent implements OnInit {
   }
 
   editarPedido(pid, tab) {
+    console.log(pid + '   -  ' + tab);
     this.newPedidoId = pid;
     this.tab = tab;
     this.pedidoIniciado = true;
-    this.selected.setValue(5);
+    this.selected.setValue(6);
   }
 
   receiveImage(event) {

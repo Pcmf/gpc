@@ -11,6 +11,11 @@
     justify-content: center;
 }
 
+.mat-card{
+    background-color: darkgray;
+    text-align: center;
+}
+
 .mat-form-field.title {
     display: inline-block;
     position: relative;
@@ -49,15 +54,17 @@
     margin: auto;
     margin-top: 2rem;
 }
-mat-header-cell{
+.mat-header-cell{
     font-size: 1.05rem;
     font-weight: 600;
 }
 
-mat-cell{
+.mat-cell{
     height: 70px;
+    cursor: pointer;
 }
-mat-cell img{
+
+.mat-cell img{
     cursor: pointer;
 }
 

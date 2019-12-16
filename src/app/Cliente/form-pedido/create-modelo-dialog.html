@@ -1,15 +1,14 @@
-<h2 mat-dialog-title>Criar Modelo</h2>
+<h2 mat-dialog-title>TEMA: {{dados.pedido.tema}}</h2>
 <mat-dialog-content>
 <div class="mat-dialog-header">
     <div class="mat-dialog-header__left">
-        <h3>TEMA: {{dados.pedido.tema}} 
-            <app-load-image (imageB64)="receiveImage($event)"></app-load-image>
-        </h3>
+        <app-load-image (imageB64)="receiveImage($event)"></app-load-image>
         <img [src]="preview" alt="" height="260">
     </div>
     <div class="mat-dialog-header__right">
         <h5>Outras imagens
-        <app-load-image (imageB64)="receiveOtherImages($event)"></app-load-image></h5>
+            <app-load-image (imageB64)="receiveOtherImages($event)"></app-load-image>
+        </h5>
         <img *ngFor="let i of images" [src]="i" alt="" height="160">        
     </div>
 

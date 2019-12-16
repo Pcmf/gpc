@@ -1,23 +1,28 @@
 <mat-card>
-    <mat-card-content>
-        <div class="mat-card-left">
-            <ul>
-                <li><span class="text-info">Tema:</span><span class="text-primary">{{pedido.tema}}</span></li>
-                <li><span class="text-info">Cliente:</span><span class="text-primary">{{pedido.nomeCliente}}</span></li>
-                <li><span class="text-info">Ref. Interna:</span><span class="text-primary">{{pedido.refInterna}}</span>
-                </li>
-            </ul>
+        <div class="mat-card-content">
+            <mat-form-field class="example-full-width">
+                <input matInput placeholder="Tema" name="tema" [(ngModel)]="pedido.tema" (change)="editPedido(pedido)">
+            </mat-form-field>
+            <mat-form-field class="example-full-width">
+                <input matInput placeholder="Ref. Interna" name="refInterna" [(ngModel)]="pedido.refInterna" (change)="editPedido(pedido)">
+            </mat-form-field>
         </div>
-        <div class="mat-card-right">
-            <img [src]="pedido.foto" alt="" (click)="fileInput2.click()">
+    <div class="mat-card-content">
+        <img [src]="pedido.foto" alt="" (click)="fileInput2.click()">
+    </div>
+    <div class="mat-card-content">
+        <button mat-stroked-button color="accent" *ngIf="pedido.situacao <= 3" (click)="addModeloDialog()">Adicionar Modelo</button>
+        <button mat-stroked-button color="primary" *ngIf="pedido.situacao == 1">Fechar para Aprovação</button>
+        <button mat-stroked-button color="#00FF0d" *ngIf="pedido.situacao == 2">Aprovado</button>
+        <button mat-stroked-button color="#FF000d" *ngIf="pedido.situacao == 2">Recusado</button>
+        <button mat-stroked-button color="accent" *ngIf="pedido.situacao == 3">Para Produção</button>
+        <button mat-stroked-button color="accent" *ngIf="pedido.situacao == 5">Concluido</button>
+        <button mat-stroked-button (click)="sair()">Sair</button>
+        <button mat-fab color="warn" [disabled]="pedido.situacao > 3" (click)="deletePedido(pedido)" title="Apagar pedido e modelos!">
+            <i class="material-icons">delete</i>
+        </button>
+    </div>
 
-        </div>
-    </mat-card-content>
-    <mat-card-footer>
-        <button mat-stroked-button color="primary" (click)="addModeloDialog()">Adicionar Modelo</button>
-        <button mat-stroked-button color="warn" (click)="cancelarCriar()">Cancela</button>
-        <mat-icon size="lg" (click)="deletePedido()" matSuffix>delete</mat-icon>
-    </mat-card-footer>
 </mat-card>
 
 <!-- Linhas do pedido - modelos -->
@@ -28,30 +33,42 @@
             <ng-container matColumnDef="refinterna">
                 <mat-header-cell *matHeaderCellDef> Ref. Interna </mat-header-cell>
                 <mat-cell *matCellDef="let element" (click)="editarModelo(element)">
-                    {{element.refinterna}}
+                    <strong>{{element.refinterna}}</strong>
                 </mat-cell>
             </ng-container>
-
             <!-- Ref Cliente Column -->
             <ng-container matColumnDef="refcliente">
                 <mat-header-cell *matHeaderCellDef> Ref. Cliente </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.refcliente}} </mat-cell>
+                <mat-cell *matCellDef="let element" (click)="editarModelo(element)">
+                    {{element.refcliente}}
+                </mat-cell>
             </ng-container>
-
+            <!-- Artigo Column -->
+            <ng-container matColumnDef="nome">
+                <mat-header-cell *matHeaderCellDef> Artigo </mat-header-cell>
+                <mat-cell *matCellDef="let element" (click)="editarModelo(element)">
+                    {{element.nome}}
+                </mat-cell>
+            </ng-container>
             <!-- Imagem Column -->
             <ng-container matColumnDef="imagem">
                 <mat-header-cell *matHeaderCellDef> Imagem </mat-header-cell>
                 <mat-cell *matCellDef="let element">
-                    <img src="{{element.foto}}" alt="" height="60px" (click)="openDialog(element)">
+                    <img src="{{element.foto}}" alt="" height="60px" (click)="editarModelo(element)">
                 </mat-cell>
             </ng-container>
-
-            <!-- Artigo Column -->
-            <ng-container matColumnDef="nome">
-                <mat-header-cell *matHeaderCellDef> Artigo </mat-header-cell>
-                <mat-cell *matCellDef="let element"> {{element.nome}} </mat-cell>
+            <!-- Remover Modelo-->
+            <ng-container matColumnDef="star">
+                <th mat-header-cell *matHeaderCellDef>Ações</th>
+                <td mat-cell *matCellDef="let element">
+                    <button [disabled]="pedido.situacao > 3" 
+                        mat-icon-button color="warn" 
+                        title="Remover modelo" 
+                        (click)="deleteModelo(element)">
+                        <mat-icon>delete_outline</mat-icon>
+                    </button>
+                </td>
             </ng-container>
-
             <mat-header-row *matHeaderRowDef="FormPedidoColunas"></mat-header-row>
             <mat-row *matRowDef="let row; columns: FormPedidoColunas;"></mat-row>
         </mat-table>
