@@ -12,11 +12,12 @@
     </div>
     <div class="mat-card-content">
         <button mat-stroked-button color="accent" *ngIf="pedido.situacao <= 3" (click)="addModeloDialog()">Adicionar Modelo</button>
-        <button mat-stroked-button color="primary" *ngIf="pedido.situacao == 1">Fechar para Aprovação</button>
-        <button mat-stroked-button color="#00FF0d" *ngIf="pedido.situacao == 2">Aprovado</button>
-        <button mat-stroked-button color="#FF000d" *ngIf="pedido.situacao == 2">Recusado</button>
-        <button mat-stroked-button color="accent" *ngIf="pedido.situacao == 3">Para Produção</button>
-        <button mat-stroked-button color="accent" *ngIf="pedido.situacao == 5">Concluido</button>
+        <button mat-stroked-button color="primary" *ngIf="pedido.situacao == 1" (click)="fecharParaAprovacao(pedido)">Fechar para Aprovação</button>
+        <button mat-stroked-button class="color-green" *ngIf="pedido.situacao == 2" (click)="aprovado(pedido)" title="Inserir os dados do pedido">Aprovado</button>
+        <button mat-stroked-button class="color-red" *ngIf="pedido.situacao == 2" (click)="recusado(pedido)">Recusado</button>
+        <button mat-stroked-button color="accent" *ngIf="pedido.situacao == 3" (click)="paraProducao(pedido)">Para Produção</button>
+        <button mat-stroked-button color="accent" *ngIf="pedido.situacao == 5" (click)="concluido(pedido)">Concluido</button>
+        <button mat-stroked-button color="warn" *ngIf="pedido.situacao == 6" (click)="reproducao(pedido)">Re-Produção</button>
         <button mat-stroked-button (click)="sair()">Sair</button>
         <button mat-fab color="warn" [disabled]="pedido.situacao > 3" (click)="deletePedido(pedido)" title="Apagar pedido e modelos!">
             <i class="material-icons">delete</i>

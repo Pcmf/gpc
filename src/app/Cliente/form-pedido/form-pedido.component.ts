@@ -58,7 +58,7 @@ export class FormPedidoComponent implements OnInit {
       data: { pedido: this.pedido, modelo: mod }
     });
     dialogRef.afterClosed().subscribe(result => {
-        this.getModelos();
+      this.getModelos();
     });
   }
 
@@ -80,17 +80,16 @@ export class FormPedidoComponent implements OnInit {
 
   deletePedido(pedido) {
     if (confirm('Vai eleminar este tema e todos os modelos. Confirma?')) {
-        this.data.deleteData('pedido/' + pedido.id).subscribe(
-          resp => {
-            console.log(resp);
-            this.reload.emit(true);
-            this.pedidoIniciado.emit(false);
-            this.tabOrigem.emit(this.tab);
-          }
-        );
+      this.data.deleteData('pedido/' + pedido.id).subscribe(
+        resp => {
+          console.log(resp);
+          this.reload.emit(true);
+          this.pedidoIniciado.emit(false);
+          this.tabOrigem.emit(this.tab);
+        }
+      );
     }
   }
-
 
   deleteModelo(modelo) {
     if (confirm('Vai eleminar este modelo. Confirma?')) {
@@ -100,7 +99,37 @@ export class FormPedidoComponent implements OnInit {
         }
       );
     }
-}
+  }
+
+  // OPERAÇÕES SOBRE O PEDIDO
+
+  fecharParaAprovacao(pedido) {
+    alert('imprimir as folhas para o pedido' + pedido.id);
+    this.data.getData('ftoaprove/' + pedido.id).subscribe(
+      resp => console.log(resp)
+    );
+  }
+
+  aprovado(pedido) {
+    alert('Registar os detalhes do pedido. Quantidades e cores.');
+  }
+
+  recusado(pedido) {
+    alert('marcar como recusado');
+  }
+
+  paraProducao(pedido) {
+    alert('Criar as folhas para produção');
+  }
+
+  concluido(pedido) {
+    alert('marcar como concluido');
+  }
+
+  reproducao(pedido) {
+    alert('copiar como novo pedido');
+  }
+
 
 }
 
