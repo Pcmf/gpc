@@ -9,43 +9,118 @@ pdfMake.vfs = pdfFonts.pdfMake.vfs;
 })
 export class PdfMakeService {
   private cliente: any = [];
-  constructor(private data: DataService) { }
+  private empresa: any = [];
+  private pedido: any = [];
+  constructor(private data: DataService) {
+    this.data.getData('empresa').subscribe(
+      resp => this.empresa = resp
+    );
 
 
-  folhaParaAprovacao(pedido) {
-    const ddFolhaParaAprovacao = this.get_ddFolhaParaAprovacao(pedido) /* { content: 'Tema: ' + pedido.tema  } */;
-    pdfMake.createPdf(ddFolhaParaAprovacao).open();
   }
 
 
-  private get_ddFolhaParaAprovacao(pedido) {
+  folhaParaAprovacao(pedido) {
+    this.pedido = pedido;
+    this.data.getData('clientes/' + this.pedido.clienteId).subscribe(
+      respc =>  {
+        this.cliente = respc;
+        const ddFolhaParaAprovacao = this.get_ddFolhaParaAprovacao() /* { content: 'Tema: ' + pedido.tema  } */;
+        pdfMake.createPdf(ddFolhaParaAprovacao).open();
+      }
+    );
+
+  }
+
+
+  private get_ddFolhaParaAprovacao() {
     return {
       content: [
-        {
-          columns: [ this.get_ddHeader(pedido) ]
+        [
+          this.get_ddHeader()
+        ],
+        [
+          this.getOther()
+        ]
 
-        }
+
       ]
     };
 
   }
 
-  private get_ddHeader(pedido) {
+  private get_ddHeader() {
 
-        const  header =  [{
-          text: 'Cliente: ' + pedido.nomeCliente,
-          style: '',
-          width: '*'
+    return {
+      columns: [
+        [this.getMyLogo()]
+        ,
+        [
+          {
+            width: '*',
+            text: 'Tema: ' + this.pedido.tema,
+            style: 'bold',
+            alignment: 'center'
+          },
+          {
+            image: this.pedido.foto,
+            width: 50,
+            alignment: 'center'
+          }
+        ],
+        [
+          this.getClienteLogo()
+        ]
+      ]
+
+    };
+  }
+
+  private getOther() {
+    return {
+      columns: [
+        {
+          // auto-sized columns have their widths based on their content
+          width: 'auto',
+          text: 'First column'
         },
         {
-          text: 'Tema: ' + pedido.tema,
-          style: 'bold',
-          width: '*'
+          // star-sized columns fill the remaining space
+          // if there's more than one star-column, available width is divided equally
+          width: '*',
+          text: 'Second column'
+        },
+        {
+          // fixed width
+          width: 100,
+          text: 'Third column'
         }
-        ];
-
-        return header;
+      ]
+    };
   }
+
+  getMyLogo() {
+    if (this.empresa.logotipo) {
+      return {
+        image: this.empresa.logotipo,
+        width: 75,
+        alignment: 'left'
+      };
+    }
+    return null;
+  }
+
+  getClienteLogo() {
+    if (this.cliente.imagem) {
+      return {
+        image: this.cliente.imagem,
+        width: 75,
+        alignment: 'right'
+      };
+    }
+    return null;
+  }
+
 
 
 }
