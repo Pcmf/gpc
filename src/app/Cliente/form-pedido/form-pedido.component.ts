@@ -2,6 +2,7 @@ import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular
 import { DataService } from 'src/app/Services/data.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute } from '@angular/router';
+import { PdfMakeService } from './../../Services/pdf-make.service';
 
 @Component({
   selector: 'app-form-pedido',
@@ -24,6 +25,7 @@ export class FormPedidoComponent implements OnInit {
     private data: DataService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
+    private pdfService: PdfMakeService
   ) {
     this.pedidoId = this.route.snapshot.params.id;
   }
@@ -105,9 +107,7 @@ export class FormPedidoComponent implements OnInit {
 
   fecharParaAprovacao(pedido) {
     alert('imprimir as folhas para o pedido' + pedido.id);
-    this.data.getData('ftoaprove/' + pedido.id).subscribe(
-      resp => console.log(resp)
-    );
+    this.pdfService.folhaParaAprovacao(pedido);
   }
 
   aprovado(pedido) {

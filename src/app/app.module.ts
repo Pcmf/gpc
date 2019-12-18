@@ -18,6 +18,10 @@ import { NgxImageCompressService} from 'ngx-image-compress';
 import { FormPedidoComponent, CreateModeloDialog } from './Cliente/form-pedido/form-pedido.component';
 import { LoadImageComponent } from './Utilities/load-image/load-image.component';
 import { LoadImageService } from './Services/load-image.service';
+import { PdfMakeService } from './Services/pdf-make.service';
+
+
+
 
 @NgModule({
   declarations: [
@@ -38,7 +42,7 @@ import { LoadImageService } from './Services/load-image.service';
     LoadImageComponent
   ],
   imports: [
-    BrowserModule,
+  BrowserModule,
     AppRoutingModule,
     BrowserAnimationsModule,
     MaterialModules,
@@ -50,7 +54,8 @@ import { LoadImageService } from './Services/load-image.service';
     AuthGuardService,
     NavbarService,
     NgxImageCompressService,
-    LoadImageService
+    LoadImageService,
+    PdfMakeService
   ],
   bootstrap: [AppComponent]
 })
