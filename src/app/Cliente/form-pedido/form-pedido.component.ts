@@ -106,7 +106,7 @@ export class FormPedidoComponent implements OnInit {
   // OPERAÇÕES SOBRE O PEDIDO
 
   fecharParaAprovacao(pedido) {
-    alert('imprimir as folhas para o pedido' + pedido.id);
+   // alert('imprimir as folhas para o pedido' + pedido.id);
     this.pdfService.folhaParaAprovacao(pedido);
   }
 
