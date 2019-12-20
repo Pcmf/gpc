@@ -31,7 +31,7 @@ export class PdfMakeService {
         this.data.getData('modelos/' + pedido.id).subscribe(
           respm => {
             this.modelos = respm;
-            const ddFolhaParaAprovacao = this.get_ddFolhaParaAprovacao();
+            const ddFolhaParaAprovacao = this.create_folhaParaAprovacao();
             pdfMake.createPdf(ddFolhaParaAprovacao).open();
           }
         );
@@ -40,35 +40,34 @@ export class PdfMakeService {
 
   }
 
+  private create_folhaParaAprovacao() {
 
-  private get_ddFolhaParaAprovacao() {
-    return {
-      content: [
-        [
-          this.get_ddHeader()
-        ],
-        [this.getLine()],
-        [this.getIdentificacaoModeloLine(this.modelos[0])],
-        {
-          columns: [
-            [this.getModeloMainImage(this.modelos[0])],
-            [
-              {
-              text: 'Observações:',
-              alignment: 'left'
-              },
-              [this.getRectangulo()]
-            ]
-          ]
-        },
-        {},
-        [ this.getTabelaQtyTamanhos() ],
-        [ this.getImagensModelo(this.modelos[0]) ],
-        [ this.getImagensModelo(this.modelos[0])]
-      ]
+    // Create document template
+    const doc = {
+      pageSize: 'A4',
+      pageOrientation: 'portrait',
+      pageMargins: [30, 30, 30, 30],
+      content: []
     };
 
+    // Para cada modelo do pedido vai adicionando o conteudo ao doc.content com push
+    this.modelos.map( modelo => {
+      doc.content.push(this.get_ddHeader());
+      doc.content.push(this.getLine());
+      doc.content.push(this.getIdentificacaoModelo(modelo));
+      doc.content.push(this.getMainImageAndObsBox(modelo));
+      doc.content.push(this.getTabelaQtyTamanhos());
+      doc.content.push(this.getPageBreak());
+      doc.content.push(this.getImagensModelo(modelo));
+      console.log(this.getImagensModelo(modelo));
+      // Page break para novo modelo
+      doc.content.push(this.getPageBreak());
+    });
+
+    return doc;
   }
+
+
 
   private get_ddHeader() {
 
@@ -143,6 +142,21 @@ export class PdfMakeService {
         fontSize: 9
       }
     ];
+  }
+
+  private getMainImageAndObsBox(modelo){
+    return {
+      columns: [
+        [this.getModeloMainImage(modelo)],
+        [
+          {
+          text: 'Observações:',
+          alignment: 'left'
+          },
+          [this.getRectangulo()]
+        ]
+      ]
+    };  
   }
 
   private getModeloDescricao(modelo) {
@@ -408,16 +422,28 @@ export class PdfMakeService {
   private getImagensModelo(modelo) {
     this.data.getData('modelos/fotos/' + modelo.id).subscribe(
       (resp: any[]) => {
-        const imagens = resp.map( element => {
+        if (resp.length == 1) {
+          console.log(resp[0].foto);
           return {
-            image: element.foto,
-            width: 75
+            image: resp[0].foto,
+            width: 200,
+            alignment: 'center'
           };
-        });
-        // tslint:disable-next-line: max-line-length
-        console.log(JSON.stringify(imagens).slice(1, -1).replace(new RegExp('"image"', 'g'), 'image').replace(new RegExp('"width"', 'g'), 'width'));
-        // tslint:disable-next-line: max-line-length
-        return JSON.stringify(imagens).slice(1, -1).replace(new RegExp('"image"', 'g'), 'image').replace(new RegExp('"width"', 'g'), 'width');
+        } else if (resp.length == 2) {
+          console.log(resp[1].foto);
+          return [
+            {
+              image: resp[0].foto,
+              width: 200,
+              alignment: 'center'
+            },
+            {
+              image: resp[1].foto,
+              width: 200,
+              alignment: 'center'
+            }
+          ];
+        }
       }
     );
   }
@@ -445,6 +471,12 @@ export class PdfMakeService {
     return null;
   }
 
+  private getPageBreak() {
+    return {
+      text: ' ',
+      pageBreak: 'before'
+    };
+  }
 
 
 }
