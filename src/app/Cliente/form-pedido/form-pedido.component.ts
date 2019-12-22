@@ -108,6 +108,13 @@ export class FormPedidoComponent implements OnInit {
   fecharParaAprovacao(pedido) {
    // alert('imprimir as folhas para o pedido' + pedido.id);
     this.pdfService.folhaParaAprovacao(pedido);
+    pedido.situacao = 2;
+    this.editPedido(pedido);
+    setTimeout(() => {
+        this.pedidoIniciado.emit(false);
+        this.tabOrigem.emit(this.tab);
+    }, 1000);
+
   }
 
   aprovado(pedido) {

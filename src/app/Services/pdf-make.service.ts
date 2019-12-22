@@ -28,7 +28,7 @@ export class PdfMakeService {
     this.data.getData('clientes/' + this.pedido.clienteId).subscribe(
       respc => {
         this.cliente = respc;
-        this.data.getData('modelos/' + pedido.id).subscribe(
+        this.data.getData('modelos/allimgs/' + pedido.id).subscribe(
           respm => {
             this.modelos = respm;
             const ddFolhaParaAprovacao = this.create_folhaParaAprovacao();
@@ -51,15 +51,14 @@ export class PdfMakeService {
     };
 
     // Para cada modelo do pedido vai adicionando o conteudo ao doc.content com push
-    this.modelos.map( modelo => {
+    this.modelos.map(modelo => {
       doc.content.push(this.get_ddHeader());
       doc.content.push(this.getLine());
-      doc.content.push(this.getIdentificacaoModelo(modelo));
-      doc.content.push(this.getMainImageAndObsBox(modelo));
+      doc.content.push(this.getIdentificacaoModeloLine(modelo.modelo));
+      doc.content.push(this.getMainImageAndObsBox(modelo.modelo));
       doc.content.push(this.getTabelaQtyTamanhos());
       doc.content.push(this.getPageBreak());
-      doc.content.push(this.getImagensModelo(modelo));
-      console.log(this.getImagensModelo(modelo));
+      doc.content.push(this.getImagensModelo(modelo.imgs));
       // Page break para novo modelo
       doc.content.push(this.getPageBreak());
     });
@@ -144,19 +143,19 @@ export class PdfMakeService {
     ];
   }
 
-  private getMainImageAndObsBox(modelo){
+  private getMainImageAndObsBox(modelo) {
     return {
       columns: [
         [this.getModeloMainImage(modelo)],
         [
           {
-          text: 'Observações:',
-          alignment: 'left'
+            text: 'Observações:',
+            alignment: 'left'
           },
           [this.getRectangulo()]
         ]
       ]
-    };  
+    };
   }
 
   private getModeloDescricao(modelo) {
@@ -419,33 +418,77 @@ export class PdfMakeService {
     };
   }
 
-  private getImagensModelo(modelo) {
-    this.data.getData('modelos/fotos/' + modelo.id).subscribe(
-      (resp: any[]) => {
-        if (resp.length == 1) {
-          console.log(resp[0].foto);
-          return {
-            image: resp[0].foto,
-            width: 200,
-            alignment: 'center'
-          };
-        } else if (resp.length == 2) {
-          console.log(resp[1].foto);
-          return [
+  private getImagensModelo(imgs) {
+    if (imgs.length == 1) {
+      return {
+        image: imgs[0].foto,
+        width: 400,
+        alignment: 'center'
+      };
+    } else if (imgs.length == 2) {
+      return [
+        {
+          image: imgs[0].foto,
+          fit: [400, 350],
+          alignment: 'center'
+        },
+        {
+          image: imgs[1].foto,
+          fit: [400, 350],
+          alignment: 'center'
+        }
+      ];
+    } else if (imgs.length == 3) {
+      return [
+        {
+          image: imgs[0].foto,
+          fit: [400, 350],
+          alignment: 'center'
+        }, {
+          columns: [
             {
-              image: resp[0].foto,
-              width: 200,
-              alignment: 'center'
+              image: imgs[1].foto,
+              fit: [250, 350],
+              width: '*'
             },
             {
-              image: resp[1].foto,
-              width: 200,
-              alignment: 'center'
+              image: imgs[2].foto,
+              fit: [250, 350],
+              width: '*'
             }
-          ];
+          ]
         }
+      ];
+    } else if (imgs.length == 4) {
+      return [{
+        columns: [
+          {
+            image: imgs[0].foto,
+            fit: [250, 350],
+            width: '*'
+          },
+          {
+            image: imgs[1].foto,
+            fit: [250, 350],
+            width: '*'
+          }]
+        }, { text: '..'},
+        {
+        columns: [
+          {
+            image: imgs[2].foto,
+            fit: [250, 350],
+            width: '*'
+          },
+          {
+            image: imgs[3].foto,
+            fit: [250, 350],
+            width: '*'
+          }
+        ]
       }
-    );
+      ];
+    }
   }
 
 
