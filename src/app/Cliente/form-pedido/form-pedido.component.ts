@@ -1,7 +1,7 @@
 import { Component, OnInit, Input, Inject, Output, EventEmitter } from '@angular/core';
 import { DataService } from 'src/app/Services/data.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { PdfMakeService } from './../../Services/pdf-make.service';
 
 @Component({
@@ -25,7 +25,8 @@ export class FormPedidoComponent implements OnInit {
     private data: DataService,
     private dialog: MatDialog,
     private route: ActivatedRoute,
-    private pdfService: PdfMakeService
+    private pdfService: PdfMakeService,
+    private router: Router
   ) {
     this.pedidoId = this.route.snapshot.params.id;
   }
@@ -118,7 +119,8 @@ export class FormPedidoComponent implements OnInit {
   }
 
   aprovado(pedido) {
-    alert('Registar os detalhes do pedido. Quantidades e cores.');
+    // alert('Registar os detalhes do pedido. Quantidades e cores.');
+    this.router.navigate(['fillPedido/', pedido.id ]);
   }
 
   recusado(pedido) {

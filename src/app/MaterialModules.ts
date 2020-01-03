@@ -5,14 +5,17 @@ import { MatInputModule,
     MatIconModule,
     MatDatepickerModule,
     MatTabsModule,
-    MatSidenavModule } from '@angular/material';
+    MatSidenavModule, 
+    MatListModule} from '@angular/material';
 import {MatDialogModule } from '@angular/material/dialog';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatCardModule } from '@angular/material/card';
 import { MatTableModule } from '@angular/material/table';
+
 import { MatPaginatorModule } from '@angular/material/paginator';
 import {MatExpansionModule} from '@angular/material/expansion';
 import { MatMenuModule} from '@angular/material/menu';
+import {MatGridListModule} from '@angular/material/grid-list';
 
 @NgModule({
     imports: [
@@ -28,7 +31,9 @@ import { MatMenuModule} from '@angular/material/menu';
         MatTabsModule,
         MatSidenavModule,
         MatExpansionModule,
-        MatMenuModule
+        MatMenuModule,
+        MatGridListModule,
+        MatListModule
     ],
     exports: [
         MatInputModule,
@@ -42,6 +47,8 @@ import { MatMenuModule} from '@angular/material/menu';
         MatTableModule,
         MatTabsModule,
         MatSidenavModule,
-        MatMenuModule
+        MatMenuModule,
+        MatGridListModule,
+        MatListModule
     ]
 }) export class MaterialModules { }

@@ -1,0 +1,164 @@
+
+<mat-grid-list cols="12" rowHeight="75px" gutterSize="1px">
+    <mat-grid-tile colspan="12"><h3>Tema: {{pedido.tema}} <span>{{pedido.nomeCliente}}</span></h3></mat-grid-tile>
+
+    <!-- Coluna dos Modelos -->
+    <mat-grid-tile colspan="1" rowspan="9">
+        <div class="modelos">
+            <h5>Modelos</h5>
+            <div class="modelos-pic" *ngFor="let m of modelos" (click)="changeSelectedModel(m)">
+                <div class="modelos-pic-text">{{m.modelo.nome}}<br/>
+                {{m.modelo.refinterna}}</div>
+                <img [src]="m.modelo.foto" width="100" alt="imagem do artigo"/>
+            </div>
+        </div>
+    </mat-grid-tile>
+
+    <!-- Coluna para visualizar um modelo -->
+    <mat-grid-tile colspan="3" rowspan="9">
+        <div class="viewer">
+            <div class="viewer-large-pic">
+                <img [src]="largePic" alt="Foto do modelo"/>
+            </div>
+            <div class="viewer-list-pics">
+                <div class="viewer-small-pic" (click)="changeLargePic(modeloSelected.modelo.foto)">
+                    <img [src]="modeloSelected.modelo.foto" alt="imagem principal"/>
+                </div>
+                <div class="viewer-small-pic" *ngFor="let p of modeloSelected.imgs" (click)="changeLargePic(p.foto)"> 
+                    <img [src]="p.foto" alt=""/>              
+                </div>
+            </div>
+            <div class="viewer-actions">
+                <button mat-stroked-button color="warn">Remover Modelo</button>
+                <button mat-stroked-button color="">Cancelar / Sair</button>
+                <button mat-stroked-button color="accent">Finalizar para Produção</button>
+            </div>
+        </div>
+    </mat-grid-tile>
+
+    <!-- Coluna para o Formulario -->
+    <mat-grid-tile colspan="8" rowspan="9">
+        <div class="formulario">
+
+            <mat-form-field class="formulario-descricao">
+                <label>Descrição:</label>
+                <textarea matInput placeholder="Descrição">{{modeloSelected.modelo.descricao}}</textarea>
+            </mat-form-field>
+
+            <div class="formulario-form">
+
+                <table id="CEQTable" class="table table-condensed table-bordered">
+                    <thead>
+                        <tr>
+                            
+                            <th class="table-lables">Cor 1</th>
+                            <th class="table-lables">Cor 2</th>
+                            <th class="table-lables">Elemento 1</th>
+                            <th class="table-lables">Elemento 2</th>
+                            <th class="table-lables">Elemento 3</th>
+                            <th *ngFor="let esc of tamanhos">{{esc}}</th>
+                            <th class="table-actions"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ln of detLines; let i = index">
+                            <td>
+                                <select name="cor1" [(ngModel)]="ln.cor1" (change)="saveLine(ln, i)">
+                                    <option value=""></option>
+                                    <option *ngFor="let c of cores" [ngValue]="c.id" [attr.selected]="c.id == ln.cor1" >{{c.nome}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="cor2" [(ngModel)]="ln.cor2" (change)="saveLine(ln, i)">
+                                    <option value=""></option>
+                                    <option *ngFor="let c of cores" [value]="c.id" [attr.selected]="c.id == ln.cor2" >{{c.nome}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="elem1" [(ngModel)]="ln.elem1.elem" (change)="saveLine(ln, i)">
+                                    <option value=""></option>
+                                    <option *ngFor="let e of elementos" 
+                                            [value]="e.id" placeholder="elemento"
+                                            [attr.selected]="e.id == ln.elem1.elem" >{{e.nome}}</option>
+                                </select>
+                                <select name="cor" [(ngModel)]="ln.elem1.cor" (change)="saveLine(ln, i)" >
+                                    <option value=""></option>
+                                    <option *ngFor="let c of cores" [value]="c.id"
+                                             [attr.selected]="c.id == ln.elem1.cor" >{{c.nome}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="elem2" [(ngModel)]="ln.elem2.elem" (change)="saveLine(ln, i)" >
+                                    <option value=""></option>
+                                    <option *ngFor="let e of elementos" [value]="e.id" [attr.selected]="e.id == ln.elem2.elem" >{{e.nome}}</option>
+                                </select>
+                                <select name="cor" [(ngModel)]="ln.elem2.cor" (change)="saveLine(ln, i)" >
+                                    <option value=""></option>
+                                    <option *ngFor="let c of cores" [value]="c.id"
+                                             [attr.selected]="c.id == ln.elem2.cor" >{{c.nome}}</option>
+                                </select>
+                            </td>
+                            <td>
+                                <select name="elem3" [(ngModel)]="ln.elem3.elem" (change)="saveLine(ln, i)" >
+                                    <option value=""></option>
+                                    <option *ngFor="let e of elementos" [value]="e.id" [attr.selected]="e.id == ln.elem3.elem" >{{e.nome}}</option>
+                                </select>
+                                <select name="cor" [(ngModel)]="ln.elem3.cor" (change)="saveLine(ln, i)" >
+                                    <option value=""></option>
+                                    <option *ngFor="let c of cores" [value]="c.id"
+                                             [attr.selected]="c.id == ln.elem3.cor" >{{c.nome}}</option>
+                                </select>
+                            </td>
+                            <td *ngFor="let esc of tamanhos">
+                                <input type="text" class="number" [(ngModel)]="ln.qtys[esc]"  
+                                value="{{ln.qtys[esc]}}" style="width: 30px"  (change)="saveLine(ln, i)"/>
+                            </td>
+                            <td>
+                                <button mat-icon-button color="warn" (click)="deleteLine(ln)"
+                                        title="Remover linha">
+                                    <mat-icon>delete</mat-icon>
+                                </button>
+                            </td> 
+                        </tr>
+                    </tbody>
+                </table>
+                <button mat-icon-button color="primary" (click)="addLine()"
+                        aria-label="Adicionar linha" title="Adicionar nova linha">
+                    <mat-icon>add_circle</mat-icon> adicionar linha
+                </button>
+                <div class="formulario-total">
+                    <table>
+                         <thead>
+                             <tr>
+                                 <th>Quantidade</th>
+                                 <th>Preço Unidade</th>
+                                 <th>Valor</th>
+                             </tr>
+                         </thead>
+                         <tbody>
+                             <tr>
+                                <td>
+                                    <input type="text" class="number" name="qtyTotal" ngModel #qtyTotal >
+                                </td>
+                                 <td>
+                                     <input type="text" class="number" name="precoUnit" #precoUnit [(ngModel)]="modeloSelected.modelo.preco" >
+                                 </td>
+                                 <td>
+                                     {{precoUnit.value * qtyTotal.value | currency:'Eur'}}
+                                 </td>
+                             </tr>
+                         </tbody>
+                    </table>
+                </div>
+             
+
+            </div>
+
+            <div class="formulario-obs">
+
+            </div>
+            <button mat-stroked-button color="primary">Guardar Alterações</button>
+        </div>
+    </mat-grid-tile>
+</mat-grid-list>
+  

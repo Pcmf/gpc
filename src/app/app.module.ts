@@ -19,6 +19,7 @@ import { FormPedidoComponent, CreateModeloDialog } from './Cliente/form-pedido/f
 import { LoadImageComponent } from './Utilities/load-image/load-image.component';
 import { LoadImageService } from './Services/load-image.service';
 import { PdfMakeService } from './Services/pdf-make.service';
+import { FillOrderComponent } from './Cliente/fill-order/fill-order.component';
 
 
 
@@ -33,7 +34,8 @@ import { PdfMakeService } from './Services/pdf-make.service';
     DashboardImageDialog,
     FormPedidoComponent,
     CreateModeloDialog,
-    LoadImageComponent
+    LoadImageComponent,
+    FillOrderComponent
   ],
   entryComponents: [
     DashboardImageDialog,
