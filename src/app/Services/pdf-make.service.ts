@@ -87,17 +87,14 @@ export class PdfMakeService {
     const doc = this.getDocTemplate();
 
     this.modelos.map(el => {
-
           const escala = this.escalas[el.modelo.escala - 1].tamanhos.split(',');
-          console.log(escala);
           doc.content.push(this.get_ddHeader());
           doc.content.push(this.getTitulo('Folha Bordados'));
           doc.content.push(this.getLine());
           doc.content.push(this.getIdentificacaoModeloLine(el.modelo));
           doc.content.push(this.getModeloMainImage(el.modelo, 100));
- //         console.log(this.getTabelaTamanhos(escala));
           doc.content.push(this.getTabelaTamanhos(escala));
-  //        console.log(doc);
+          
           doc.content.push(this.getPageBreak());
 
         }
