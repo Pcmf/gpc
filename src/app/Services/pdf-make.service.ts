@@ -12,13 +12,16 @@ export class PdfMakeService {
   private empresa: any = [];
   private modelos: any = [];
   private pedido: any = [];
+  private escalas: any = [];
 
 
   constructor(private data: DataService) {
     this.data.getData('empresa').subscribe(
       resp => this.empresa = resp
     );
-
+    this.data.getData('escalas').subscribe(
+      res => this.escalas = res
+    );
 
   }
 
@@ -33,22 +36,36 @@ export class PdfMakeService {
             this.modelos = respm;
             const ddFolhaParaAprovacao = this.create_folhaParaAprovacao();
             pdfMake.createPdf(ddFolhaParaAprovacao).open();
+            const pdfDocGenerator = pdfMake.createPdf(ddFolhaParaAprovacao);
+          //  pdfDocGenerator.getBase64((data) => console.log(data));
           }
         );
       }
     );
-
+  }
+  // Produção - Bordados, Corte, Confeção
+  folhasParaProducao(pedido) {
+    this.pedido = pedido;
+    this.data.getData('clientes/' + this.pedido.clienteId).subscribe(
+      respc => {
+        this.cliente = respc;
+        this.data.getData('modelos/allimgs/' + pedido.id).subscribe(
+          respm => {
+            this.modelos = respm;
+            const ddFolhaBordados = this.create_folhaBordados();
+            pdfMake.createPdf(ddFolhaBordados).open();
+            const pdfDocGenerator = pdfMake.createPdf(ddFolhaBordados);
+          //  pdfDocGenerator.getBase64((data) => console.log(data));
+          }
+        );
+      }
+    );
   }
 
   private create_folhaParaAprovacao() {
 
     // Create document template
-    const doc = {
-      pageSize: 'A4',
-      pageOrientation: 'portrait',
-      pageMargins: [30, 30, 30, 30],
-      content: []
-    };
+    const doc = this.getDocTemplate();
 
     // Para cada modelo do pedido vai adicionando o conteudo ao doc.content com push
     this.modelos.map(modelo => {
@@ -64,6 +81,41 @@ export class PdfMakeService {
     });
 
     return doc;
+  }
+
+  private create_folhaBordados() {
+    const doc = this.getDocTemplate();
+
+    this.modelos.map(el => {
+
+          const escala = this.escalas[el.modelo.escala - 1].tamanhos.split(',');
+          console.log(escala);
+          doc.content.push(this.get_ddHeader());
+          doc.content.push(this.getTitulo('Folha Bordados'));
+          doc.content.push(this.getLine());
+          doc.content.push(this.getIdentificacaoModeloLine(el.modelo));
+          doc.content.push(this.getModeloMainImage(el.modelo, 100));
+ //         console.log(this.getTabelaTamanhos(escala));
+          doc.content.push(this.getTabelaTamanhos(escala));
+  //        console.log(doc);
+          doc.content.push(this.getPageBreak());
+
+        }
+      );
+
+
+    return doc;
+  }
+
+
+
+  private getDocTemplate(){
+    return {
+      pageSize: 'A4',
+      pageOrientation: 'portrait',
+      pageMargins: [30, 30, 30, 30],
+      content: []
+    };
   }
 
 
@@ -92,6 +144,15 @@ export class PdfMakeService {
         ]
       ]
 
+    };
+  }
+
+  private getTitulo(titulo) {
+    return  {
+      text: titulo,
+      fontSize: 14,
+      alignment: 'center',
+      margin: 5
     };
   }
 
@@ -146,7 +207,7 @@ export class PdfMakeService {
   private getMainImageAndObsBox(modelo) {
     return {
       columns: [
-        [this.getModeloMainImage(modelo)],
+        [this.getModeloMainImage(modelo, 200)],
         [
           {
             text: 'Observações:',
@@ -166,12 +227,12 @@ export class PdfMakeService {
     };
   }
 
-  private getModeloMainImage(modelo) {
+  private getModeloMainImage(modelo, w) {
     if (modelo.foto) {
       return {
         margin: 10,
         image: modelo.foto,
-        width: 200,
+        width: w,
         alignment: 'center'
       };
     }
@@ -491,6 +552,55 @@ export class PdfMakeService {
     }
   }
 
+  private getTabelaTamanhos(escala) {
+    return {
+      margin: [0, 20],
+      fontSize: 8,
+      table: {
+        widths: [50, 50, 50, 50, 50, ...this.getEscalaColumnsWidths(escala)],
+        body: [
+          [{ text: 'Cor 1', alignment: 'center' },
+          { text: 'Cor 2', alignment: 'center' },
+          { text: 'Elem 1', alignment: 'center' },
+          { text: 'Elem 2', alignment: 'center' },
+          { text: 'Elem 3', alignment: 'center' }, ...this.getEscalaColumnsNames(escala)],
+          [
+            { text: '' },
+            { text: ''  },
+            { text: ' ' },
+            { text: ' ' },
+            { text: ' ' },
+            { text: ' ' },
+            { text: ' ' },
+            { text: ' ' },
+            { text: ' ' },
+            { text: ' ' },
+            { text: ' ' },
+            { text: ' ' },
+            { text: ' ' },
+            { text: ' ' },
+            { text: ' ' }
+          ]
+        ]
+      }
+    };
+
+  }
+
+  private getEscalaColumnsWidths(escala) {
+    const array = [];
+    escala.forEach(element => {
+      array.push('*');
+    });
+    return array;
+  }
+  private getEscalaColumnsNames(escala) {
+    const cn = [];
+    escala.forEach(elem => {
+      cn.push({text: elem, alignment: 'center'});
+    });
+    return cn;
+  }
 
   private getMyLogo() {
     if (this.empresa.logotipo) {

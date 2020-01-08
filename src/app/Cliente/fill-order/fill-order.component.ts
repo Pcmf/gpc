@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from 'src/app/Services/data.service';
+import { Location } from '@angular/common';
+import { PdfMakeService } from './../../Services/pdf-make.service';
 
 @Component({
   selector: 'app-fill-order',
@@ -22,7 +24,11 @@ export class FillOrderComponent implements OnInit {
   totalByModelo: number;
 
 
-  constructor(private route: ActivatedRoute, private data: DataService) {
+  constructor(private route: ActivatedRoute,
+              private data: DataService,
+              private location: Location,
+              private pdfService: PdfMakeService
+             ) {
     this.pedidoId = this.route.snapshot.params.id;
     this.data.getData('cores').subscribe(
       respc => this.cores = respc
@@ -56,9 +62,20 @@ export class FillOrderComponent implements OnInit {
     this.data.getData('detpedcor/' + this.pedidoId + '/' + modelo.modelo.id).subscribe(
       resp => {
         this.detLines = resp;
-        console.log(this.detLines[0].qtys);
+
+        this.getTotalQtys();
       }
     );
+  }
+
+  getTotalQtys() {
+    let total = 0;
+    this.detLines.forEach(el => {
+      this.tamanhos.forEach( t => {
+        !el.qtys[t] ? total = total : total += +el.qtys[t];
+      });
+    } );
+    this.totalByModelo = total;
   }
 
   // Alterar a imagem do visualizador
@@ -70,7 +87,22 @@ export class FillOrderComponent implements OnInit {
   saveLine(ln, index) {
     // console.log(ln.linha);
     this.data.editData('detpedcor/' + this.pedidoId + '/' + ln.modelo + '/' + index, ln).subscribe(
-      resp => ln.linha = resp
+      resp => {
+        ln.linha = resp;
+        this.getTotalQtys();
+      }
+    );
+  }
+
+  // guardar novo preço de modelo
+  savePrice(preco) {
+      this.modeloSelected.modelo.preco = preco;
+      this.saveChanges();
+  }
+
+  saveChanges() {
+    this.data.editData('modelo/' + this.modeloSelected.modelo.id, this.modeloSelected.modelo).subscribe(
+      resp => console.log(resp)
     );
   }
 
@@ -94,6 +126,14 @@ export class FillOrderComponent implements OnInit {
         this.changeSelectedModel(this.modeloSelected);
       }
     );
+  }
+
+  cancel() {
+    this.location.back();
+  }
+
+  sendToProduction() {
+    this.pdfService.folhasParaProducao(this.pedido);
   }
 
 

@@ -30,8 +30,7 @@
             </div>
             <div class="viewer-actions">
                 <button mat-stroked-button color="warn">Remover Modelo</button>
-                <button mat-stroked-button color="">Cancelar / Sair</button>
-                <button mat-stroked-button color="accent">Finalizar para Produção</button>
+                
             </div>
         </div>
     </mat-grid-tile>
@@ -41,7 +40,6 @@
         <div class="formulario">
 
             <mat-form-field class="formulario-descricao">
-                <label>Descrição:</label>
                 <textarea matInput placeholder="Descrição">{{modeloSelected.modelo.descricao}}</textarea>
             </mat-form-field>
 
@@ -130,21 +128,24 @@
                     <table>
                          <thead>
                              <tr>
-                                 <th>Quantidade</th>
                                  <th>Preço Unidade</th>
+                                 <th>Quantidade</th>
                                  <th>Valor</th>
                              </tr>
                          </thead>
                          <tbody>
                              <tr>
-                                <td>
-                                    <input type="text" class="number" name="qtyTotal" ngModel #qtyTotal >
-                                </td>
                                  <td>
-                                     <input type="text" class="number" name="precoUnit" #precoUnit [(ngModel)]="modeloSelected.modelo.preco" >
+                                     <input type="text" class="number" name="precoUnit" 
+                                            #precoUnit 
+                                            [(ngModel)]="modeloSelected.modelo.preco"
+                                            (change)="savePrice(precoUnit.value)">
                                  </td>
                                  <td>
-                                     {{precoUnit.value * qtyTotal.value | currency:'Eur'}}
+                                    {{totalByModelo}}
+                                </td>
+                                 <td>
+                                     {{precoUnit.value * totalByModelo | currency:'€'}}
                                  </td>
                              </tr>
                          </tbody>
@@ -155,9 +156,18 @@
             </div>
 
             <div class="formulario-obs">
-
+                <mat-form-field class="form-obs">
+                    <textarea matInput placeholder="Observações" name="obsinternas" 
+                              [(ngModel)]="modeloSelected.modelo.obsinternas"
+                              (blur)="saveChanges()">
+                    </textarea>
+                </mat-form-field>
             </div>
-            <button mat-stroked-button color="primary">Guardar Alterações</button>
+            <div class="formulario-buttons">
+                <button mat-stroked-button color="primary" (click)="cancel()">Cancelar / Sair</button>
+                <button mat-stroked-button color="accent" (click)="sendToProduction()">Finalizar para Produção</button>                
+            </div>
+
         </div>
     </mat-grid-tile>
 </mat-grid-list>
