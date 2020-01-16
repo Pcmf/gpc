@@ -93,8 +93,10 @@ export class PdfMakeService {
           doc.content.push(this.getLine());
           doc.content.push(this.getIdentificacaoModeloLine(el.modelo));
           doc.content.push(this.getModeloMainImage(el.modelo, 100));
-          doc.content.push(this.getTabelaTamanhos(escala));
-          
+          doc.content.push(this.getTabelaTamanhos(el.dpc, escala));
+          doc.content.push(this.getObsBox(el.modelo));
+          doc.content.push(this.getTabelaProducao());
+          doc.content.push(this.getNotasBox());
           doc.content.push(this.getPageBreak());
 
         }
@@ -549,7 +551,7 @@ export class PdfMakeService {
     }
   }
 
-  private getTabelaTamanhos(escala) {
+  private getTabelaTamanhos(dpc, escala) {
     return {
       margin: [0, 20],
       fontSize: 8,
@@ -561,27 +563,67 @@ export class PdfMakeService {
           { text: 'Elem 1', alignment: 'center' },
           { text: 'Elem 2', alignment: 'center' },
           { text: 'Elem 3', alignment: 'center' }, ...this.getEscalaColumnsNames(escala)],
-          [
-            { text: '' },
-            { text: ''  },
-            { text: ' ' },
-            { text: ' ' },
-            { text: ' ' },
-            { text: ' ' },
-            { text: ' ' },
-            { text: ' ' },
-            { text: ' ' },
-            { text: ' ' },
-            { text: ' ' },
-            { text: ' ' },
-            { text: ' ' },
-            { text: ' ' },
-            { text: ' ' }
-          ]
+           ...this.getDadosDetalhe(dpc, escala)
         ]
       }
     };
 
+  }
+
+  private getDadosDetalhe(dpc, escala){
+    const array = [];
+    dpc.map((ln) => {
+      const array1 = [];
+      array1.push({text: ln.ncor1}, {text: ln.ncor2}, [{text: ln.nelem1}, {text: ln.nelem1cor}], {text: ln.nelem2}, {text: ln.nelem3});
+      escala.forEach(sz => {
+        if (ln.qtys[sz]){
+          array1.push({text: ln.qtys[sz]});
+        } else {
+          array1.push({text: 0});
+        }
+      });
+      array.push(array1);
+    });
+    return array;
+  }
+
+  private getObsBox(modelo) {
+    return {
+        table: {
+        widths: ['*'],
+        heights: [ 70],
+        body: [
+          [{text: 'Obs: ' + modelo.obsinternas}]
+        ]
+      }
+    };
+  }
+
+  private getTabelaProducao() {
+    return {
+        margin: [0, 10],
+        table: {
+        widths: ['*', '*', '*', '*', '*'],
+        // heights: [ 30],
+        body: [
+          ['Inicio Produção', 'Fim Produção', 'Peças/Hora', 'Preço Bordado', 'Total'],
+          [' ', ' ', ' ', ' ', ' ']
+        ]
+      }
+    };
+  }
+
+  private getNotasBox() {
+    return {
+        margin: [0, 10],
+        table: {
+        widths: ['*'],
+        heights: [ 70],
+        body: [
+          [{text: 'Notas: '}]
+        ]
+      }
+    };
   }
 
   private getEscalaColumnsWidths(escala) {

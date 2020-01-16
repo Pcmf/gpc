@@ -29,25 +29,25 @@ export class FillOrderComponent implements OnInit {
               private location: Location,
               private pdfService: PdfMakeService
              ) {
-    this.pedidoId = this.route.snapshot.params.id;
-    this.data.getData('cores').subscribe(
-      respc => this.cores = respc
-    );
-    this.data.getData('elementos').subscribe(
-      respc => this.elementos = respc
-    );
-    this.data.getData('escalas').subscribe(
-      respc => this.escalas = respc
-    );
-    this.data.getData('pedido/' + this.pedidoId).subscribe(
-      respp => this.pedido = respp
-    );
-    this.data.getData('modelos/allimgs/' + this.pedidoId).subscribe(
-      resp => {
-        this.modelos = resp;
-        this.changeSelectedModel(this.modelos[0]);
-      }
-    );
+        this.pedidoId = this.route.snapshot.params.id;
+        this.data.getData('cores').subscribe(
+          respa => this.cores = respa
+        );
+        this.data.getData('elementos').subscribe(
+          respb => this.elementos = respb
+        );
+        this.data.getData('escalas').subscribe(
+          respc => this.escalas = respc
+        );
+        this.data.getData('pedido/' + this.pedidoId).subscribe(
+          respd => this.pedido = respd
+        );
+        this.data.getData('modelos/allimgs/' + this.pedidoId).subscribe(
+          resp => {
+            this.modelos = resp;
+            this.changeSelectedModel(this.modelos[0]);
+          }
+        );
   }
 
   ngOnInit() {
@@ -59,10 +59,9 @@ export class FillOrderComponent implements OnInit {
     this.modeloSelected.eskala = this.escalas[this.modeloSelected.modelo.escala - 1];
     this.tamanhos = (this.escalas[this.modeloSelected.modelo.escala - 1]).tamanhos.split(',');
     this.largePic = modelo.modelo.foto;
-    this.data.getData('detpedcor/' + this.pedidoId + '/' + modelo.modelo.id).subscribe(
+    this.data.getData('detalhe/' + this.pedidoId + '/' + modelo.modelo.id).subscribe(
       resp => {
         this.detLines = resp;
-
         this.getTotalQtys();
       }
     );
@@ -85,13 +84,23 @@ export class FillOrderComponent implements OnInit {
 
   // Guardar uma linha para a DB
   saveLine(ln, index) {
-    // console.log(ln.linha);
-    this.data.editData('detpedcor/' + this.pedidoId + '/' + ln.modelo + '/' + index, ln).subscribe(
-      resp => {
-        ln.linha = resp;
-        this.getTotalQtys();
-      }
+    if (ln.linha) {
+      // atualiza linha
+      this.data.editData('detalhe/' + this.pedidoId + '/' + ln.modelo + '/' + ln.linha  , ln).subscribe(
+        resp => {
+          this.getTotalQtys();
+        }
+      );
+    } else {
+      // Insere linha
+      this.data.saveData('detalhe/' + this.pedidoId + '/' + ln.modelo, ln).subscribe(
+        resp => {
+            ln.linha = resp;
+            this.getTotalQtys();
+        }
     );
+    }
+
   }
 
   // guardar novo preço de modelo
@@ -111,16 +120,19 @@ export class FillOrderComponent implements OnInit {
     const linha = {pedido: this.pedidoId, modelo: this.modeloSelected.modelo.id, linha: '',
             cor1: '',
             cor2: '',
-            elem1: {elem: '', cor: ''},
-            elem2: {elem: '', cor: ''},
-            elem3: {elem: '', cor: ''},
-            qtys: {}, };
+            elem1: '',
+            elem1cor: '',
+            elem2: '',
+            elem2cor: '',
+            elem3: '',
+            elem3cor: '',
+            qtys: {} };
 
     this.detLines.push(linha);
   }
 
   deleteLine(ln) {
-    this.data.deleteData('detpedcor/' + ln.pedido + '/' + ln.modelo + '/' + ln.linha).subscribe(
+    this.data.deleteData('detalhe/' + ln.pedido + '/' + ln.modelo + '/' + ln.linha).subscribe(
       resp => {
         console.log(resp);
         this.changeSelectedModel(this.modeloSelected);

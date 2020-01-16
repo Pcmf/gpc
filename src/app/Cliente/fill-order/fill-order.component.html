@@ -73,38 +73,38 @@
                                 </select>
                             </td>
                             <td>
-                                <select name="elem1" [(ngModel)]="ln.elem1.elem" (change)="saveLine(ln, i)">
+                                <select name="elem1" [(ngModel)]="ln.elem1" (change)="saveLine(ln, i)">
                                     <option value=""></option>
                                     <option *ngFor="let e of elementos" 
                                             [value]="e.id" placeholder="elemento"
-                                            [attr.selected]="e.id == ln.elem1.elem" >{{e.nome}}</option>
+                                            [attr.selected]="e.id == ln.elem1" >{{e.nome}}</option>
                                 </select>
-                                <select name="cor" [(ngModel)]="ln.elem1.cor" (change)="saveLine(ln, i)" >
+                                <select name="cor" [(ngModel)]="ln.elem1cor" (change)="saveLine(ln, i)" >
                                     <option value=""></option>
                                     <option *ngFor="let c of cores" [value]="c.id"
-                                             [attr.selected]="c.id == ln.elem1.cor" >{{c.nome}}</option>
+                                             [attr.selected]="c.id == ln.elem1cor" >{{c.nome}}</option>
                                 </select>
                             </td>
                             <td>
-                                <select name="elem2" [(ngModel)]="ln.elem2.elem" (change)="saveLine(ln, i)" >
+                                <select name="elem2" [(ngModel)]="ln.elem2" (change)="saveLine(ln, i)" >
                                     <option value=""></option>
-                                    <option *ngFor="let e of elementos" [value]="e.id" [attr.selected]="e.id == ln.elem2.elem" >{{e.nome}}</option>
+                                    <option *ngFor="let e of elementos" [value]="e.id" [attr.selected]="e.id == ln.elem2" >{{e.nome}}</option>
                                 </select>
-                                <select name="cor" [(ngModel)]="ln.elem2.cor" (change)="saveLine(ln, i)" >
+                                <select name="cor" [(ngModel)]="ln.elem2cor" (change)="saveLine(ln, i)" >
                                     <option value=""></option>
                                     <option *ngFor="let c of cores" [value]="c.id"
-                                             [attr.selected]="c.id == ln.elem2.cor" >{{c.nome}}</option>
+                                             [attr.selected]="c.id == ln.elem2cor" >{{c.nome}}</option>
                                 </select>
                             </td>
                             <td>
-                                <select name="elem3" [(ngModel)]="ln.elem3.elem" (change)="saveLine(ln, i)" >
+                                <select name="elem3" [(ngModel)]="ln.elem3" (change)="saveLine(ln, i)" >
                                     <option value=""></option>
-                                    <option *ngFor="let e of elementos" [value]="e.id" [attr.selected]="e.id == ln.elem3.elem" >{{e.nome}}</option>
+                                    <option *ngFor="let e of elementos" [value]="e.id" [attr.selected]="e.id == ln.elem3" >{{e.nome}}</option>
                                 </select>
-                                <select name="cor" [(ngModel)]="ln.elem3.cor" (change)="saveLine(ln, i)" >
+                                <select name="cor" [(ngModel)]="ln.elem3cor" (change)="saveLine(ln, i)" >
                                     <option value=""></option>
                                     <option *ngFor="let c of cores" [value]="c.id"
-                                             [attr.selected]="c.id == ln.elem3.cor" >{{c.nome}}</option>
+                                             [attr.selected]="c.id == ln.elem3cor" >{{c.nome}}</option>
                                 </select>
                             </td>
                             <td *ngFor="let esc of tamanhos">
