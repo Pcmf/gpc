@@ -144,8 +144,17 @@ export class FillOrderComponent implements OnInit {
     this.location.back();
   }
 
-  sendToProduction() {
-    this.pdfService.folhasParaProducao(this.pedido);
+  sendToProduction(tipo) {
+    if (tipo) {
+      this.pdfService.folhasParaProducao(this.pedido);
+    }
+    // Change status to "para produção"
+    this.pedido.situacao = 5;
+    this.data.editData('pedido/' + this.pedido.id, this.pedido ).subscribe(
+      resp => {
+        console.log(resp);
+      }
+    );
   }
 
 

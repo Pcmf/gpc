@@ -97,6 +97,12 @@ export class PdfMakeService {
           doc.content.push(this.getObsBox(el.modelo));
           doc.content.push(this.getTabelaProducao());
           doc.content.push(this.getNotasBox());
+          // Se tiver imagens extra
+          if (el.imgs.length > 0) {
+            doc.content.push(this.getPageBreak());
+            doc.content.push(this.getImagensModelo(el.imgs));
+          }
+          // Page break para novo modelo
           doc.content.push(this.getPageBreak());
 
         }

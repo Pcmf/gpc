@@ -164,8 +164,10 @@
                 </mat-form-field>
             </div>
             <div class="formulario-buttons">
-                <button mat-stroked-button color="primary" (click)="cancel()">Cancelar / Sair</button>
-                <button mat-stroked-button color="accent" (click)="sendToProduction()">Finalizar para Produção</button>                
+                <button mat-stroked-button color="default" (click)="cancel()">Cancelar / Sair</button>
+                <button mat-stroked-button color="primary" (click)="sendToProduction(0)">Fechar sem impressão</button>
+                <button mat-stroked-button color="accent" (click)="sendToProduction(1)"
+                        title="Fecha para produção e imprime as folhas.">Finalizar para Produção</button>                
             </div>
 
         </div>
