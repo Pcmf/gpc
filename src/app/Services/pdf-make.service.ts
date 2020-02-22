@@ -54,8 +54,13 @@ export class PdfMakeService {
             this.modelos = respm;
             const ddFolhaBordados = this.create_folhaBordados();
             pdfMake.createPdf(ddFolhaBordados).open();
-            const pdfDocGenerator = pdfMake.createPdf(ddFolhaBordados);
+          //  const pdfDocGenerator = pdfMake.createPdf(ddFolhaBordados);
           //  pdfDocGenerator.getBase64((data) => console.log(data));
+            const ddFolhaCorte = this.create_folhaCorte();
+            pdfMake.createPdf(ddFolhaCorte).open();
+         //   const pdfDocGeneratorCorte = pdfMake.createPdf(ddFolhaCorte);
+            const ddFolhaConfecao = this.create_folhaConfecao();
+            pdfMake.createPdf(ddFolhaConfecao).open();
           }
         );
       }
@@ -82,7 +87,9 @@ export class PdfMakeService {
 
     return doc;
   }
-
+  /**
+   * Folha Bordados
+   */
   private create_folhaBordados() {
     const doc = this.getDocTemplate();
 
@@ -104,15 +111,63 @@ export class PdfMakeService {
           }
           // Page break para novo modelo
           doc.content.push(this.getPageBreak());
-
         }
       );
-
-
     return doc;
   }
 
+  /**
+   * Folha de Corte
+   */
+  private create_folhaCorte() {
+    const doc = this.getDocTemplate();
+    this.modelos.map(el => {
+      const escala = this.escalas[el.modelo.escala - 1].tamanhos.split(',');
+      doc.content.push(this.get_ddHeader());
+      doc.content.push(this.getTitulo('Folha de Corte'));
+      doc.content.push(this.getLine());
+      doc.content.push(this.getIdentificacaoModeloLine(el.modelo));
+      doc.content.push(this.getModeloMainImage(el.modelo, 100));
+      doc.content.push(this.getTabelaTamanhos(el.dpc, escala));
 
+      doc.content.push(this.getTabelaMaterial(el.dpc, escala));
+
+      doc.content.push(this.getObsBox(el.modelo));
+                // Se tiver imagens extra
+      if (el.imgs.length > 0) {
+                  doc.content.push(this.getPageBreak());
+                  doc.content.push(this.getImagensModelo(el.imgs));
+                }
+      doc.content.push(this.getPageBreak());
+    });
+    return doc;
+  }
+  /**
+   * Folha de Confeção
+   */
+  private create_folhaConfecao() {
+    const doc = this.getDocTemplate();
+    this.modelos.map(el => {
+      const escala = this.escalas[el.modelo.escala - 1].tamanhos.split(',');
+      doc.content.push(this.get_ddHeader());
+      doc.content.push(this.getTitulo('Folha de Confeção'));
+      doc.content.push(this.getLine());
+      doc.content.push(this.getIdentificacaoModeloLine(el.modelo));
+      doc.content.push(this.getModeloMainImage(el.modelo, 100));
+      doc.content.push(this.getTabelaTamanhos(el.dpc, escala));
+
+      doc.content.push(this.getTabelaRegistro(el.dpc, escala));
+
+      doc.content.push(this.getObsBox(el.modelo));
+                // Se tiver imagens extra
+      if (el.imgs.length > 0) {
+                  doc.content.push(this.getPageBreak());
+                  doc.content.push(this.getImagensModelo(el.imgs));
+                }
+      doc.content.push(this.getPageBreak());
+    });
+    return doc;
+  }
 
   private getDocTemplate(){
     return {
@@ -619,6 +674,44 @@ export class PdfMakeService {
     };
   }
 
+  private getTabelaMaterial(dpc, escala) {
+    return {
+        margin: [0, 10],
+        fontSize: 8,
+        table: {
+        widths: ['*', '*', '*', '*', '*', '*', '*'],
+        // heights: [ 30],
+        body: [
+          ['Cor 1', 'Cor 2', 'Kilos', 'Tipo Malha', 'Fornecedor', 'Qtd Gasta', 'Peso p/Cor'],
+          ...this.getCorMaterial(dpc)
+        ]
+      }
+    };
+  }
+
+  private getCorMaterial(dcp) {
+    const array = [];
+    dcp.map((ln) => {
+      array.push([{text: ln.ncor1}, {text: ln.ncor2}, {text: ' ', fontSize: 12}, {text: ''} , {text: ''} , {text: ''} , {text: ''}] );
+    });
+    return array;
+  }
+
+  private getTabelaRegistro(dpc, escala) {
+    return {
+        margin: [0, 10],
+        fontSize: 8,
+        table: {
+        widths: ['*', '*', '*', '*', '*', '*', '*'],
+        // heights: [ 30],
+        body: [
+          ['Entrada Linha', 'Data Saida', 'Produção Média', 'Qtd Pedido', 'Custo Feitio', 'Total', ''],
+          [{text: ' ', fontSize: 18 }, '   ', '   ', '   ', '   ', '  ', '  ']
+        ]
+      }
+    };
+  }
+
   private getNotasBox() {
     return {
         margin: [0, 10],
@@ -639,6 +732,7 @@ export class PdfMakeService {
     });
     return array;
   }
+
   private getEscalaColumnsNames(escala) {
     const cn = [];
     escala.forEach(elem => {

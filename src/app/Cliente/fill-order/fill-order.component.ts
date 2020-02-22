@@ -13,13 +13,14 @@ export class FillOrderComponent implements OnInit {
   pedidoId: number;
   modelos: any = [];
   pedido: any = [];
+  modelo: any = [];
   modeloSelected: any = [];
   modeloSelectedFotos: any = [];
   largePic: string;
   cores: any = [];
   elementos: any = [];
   escalas: any = [];
-  tamanhos: string[];
+  tamanhos: string [];
   detLines: any = [];
   totalByModelo: number;
 

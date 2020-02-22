@@ -73,10 +73,10 @@
                                 </select>
                             </td>
                             <td>
-                                <select name="elem1" [(ngModel)]="ln.elem1" (change)="saveLine(ln, i)">
+                                <select name="elem1" [(ngModel)]="ln.elem1" (change)="saveLine(ln, i)" >
                                     <option value=""></option>
                                     <option *ngFor="let e of elementos" 
-                                            [value]="e.id" placeholder="elemento"
+                                            [value]="e.id" placeholder="elemento" 
                                             [attr.selected]="e.id == ln.elem1" >{{e.nome}}</option>
                                 </select>
                                 <select name="cor" [(ngModel)]="ln.elem1cor" (change)="saveLine(ln, i)" >
@@ -137,8 +137,9 @@
                              <tr>
                                  <td>
                                      <input type="text" class="number" name="precoUnit" 
-                                            #precoUnit 
+                                            #precoUnit="ngModel" 
                                             [(ngModel)]="modeloSelected.modelo.preco"
+                                            value="0"
                                             (change)="savePrice(precoUnit.value)">
                                  </td>
                                  <td>
