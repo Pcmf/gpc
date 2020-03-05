@@ -1,0 +1,40 @@
+<form #f="ngForm" (submit)="saveCliente(f.value)">
+<div mat-dialog-content>
+    <mat-form-field appearance="fill">
+        <mat-label>Nome</mat-label>
+        <input matInput #nome="ngModel" name="nome" [ngModel]="cliente.nome">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Contacto</mat-label>
+        <input matInput #contacto="ngModel" name="contacto" [ngModel]="cliente.contacto">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Responsavel</mat-label>
+        <input matInput #responsavel="ngModel" name="responsavel" [ngModel]="cliente.responsavel">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>email</mat-label>
+        <input matInput #email="ngModel" name="email" [ngModel]="cliente.email">
+      </mat-form-field>
+
+      <mat-form-field appearance="fill">
+        <mat-label>Prefix RefInterna</mat-label>
+        <input matInput #codigo="ngModel" name="codigo" [ngModel]="cliente.codigo">
+      </mat-form-field>
+
+      <div class="foto-box">
+          <img [src]="cliente.imagem">
+      </div>
+
+      <div class="actions">
+         <!-- template seleciona imagem --> 
+        <app-load-image (imageB64)="receiveImage($event)"></app-load-image>
+        <button mat-button type="button" [mat-dialog-close] cdkFocusInitial>Cancelar</button>
+        <button mat-button color="accent" type="submit">Guardar <mat-icon>save</mat-icon></button>
+        
+      </div>
+</div>
+</form>

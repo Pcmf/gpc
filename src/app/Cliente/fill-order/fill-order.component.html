@@ -18,14 +18,14 @@
     <mat-grid-tile colspan="3" rowspan="9">
         <div class="viewer">
             <div class="viewer-large-pic">
-                <img [src]="largePic" alt="Foto do modelo"/>
+                <img class="viewer-large-pic" [src]="largePic" alt="Foto do modelo"/>
             </div>
             <div class="viewer-list-pics">
-                <div class="viewer-small-pic" (click)="changeLargePic(modeloSelected.modelo.foto)">
-                    <img [src]="modeloSelected.modelo.foto" alt="imagem principal"/>
+                <div class="viewer-small" (click)="changeLargePic(modeloSelected.modelo.foto)">
+                    <img class="viewer-small-pic" [src]="modeloSelected.modelo.foto" alt="imagem principal"/>
                 </div>
-                <div class="viewer-small-pic" *ngFor="let p of modeloSelected.imgs" (click)="changeLargePic(p.foto)"> 
-                    <img [src]="p.foto" alt=""/>              
+                <div class="viewer-small" *ngFor="let p of modeloSelected.imgs" (click)="changeLargePic(p.foto)"> 
+                    <img class="viewer-small-pic" [src]="p.foto" alt=""/>              
                 </div>
             </div>
             <div class="viewer-actions">

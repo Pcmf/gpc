@@ -1,0 +1,23 @@
+<div class="container">
+    <form #f="ngForm" (submit)="saveCor(f.value)">
+        <mat-form-field>
+            <mat-label>ID</mat-label>
+            <input matInput #id="ngModel" name="id" [(ngModel)]="cor.id" readonly>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Nome</mat-label>
+            <input matInput #nome="ngModel" name="nome" [(ngModel)]="cor.nome">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>ref</mat-label>
+            <input matInput #ref="ngModel" name="ref" [(ngModel)]="cor.ref">
+        </mat-form-field>
+
+        <div class="action">
+            <button mat-button type="button" [mat-dialog-close]>Cancelar</button>
+            <button mat-button color="accent" type="submit">Guardar <mat-icon>save</mat-icon></button>
+        </div>
+    </form>
+</div>

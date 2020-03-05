@@ -15,11 +15,16 @@ import { AuthGuardService } from './Services/auth-guard.service';
 import { NavbarService } from './Services/navbar.service';
 import { HttpClientModule } from '@angular/common/http';
 import { NgxImageCompressService} from 'ngx-image-compress';
-import { FormPedidoComponent, CreateModeloDialog } from './Cliente/form-pedido/form-pedido.component';
+import { FormPedidoComponent, CreateModeloDialog, OrderDetDialog } from './Cliente/form-pedido/form-pedido.component';
 import { LoadImageComponent } from './Utilities/load-image/load-image.component';
 import { LoadImageService } from './Services/load-image.service';
 import { PdfMakeService } from './Services/pdf-make.service';
 import { FillOrderComponent } from './Cliente/fill-order/fill-order.component';
+import { ClientesComponent, EditClienteDialog } from './Manutencao/clientes/clientes.component';
+import { ArtigosComponent, EditArtigoDialog } from './Manutencao/artigos/artigos.component';
+import { CoresComponent, EditCorDialog } from './Manutencao/cores/cores.component';
+import { ElementosComponent, EditElementoDialog } from './Manutencao/elementos/elementos.component';
+import { UtilizadoresComponent, EditUtilizadoresDialog } from './Manutencao/utilizadores/utilizadores.component';
 
 
 
@@ -35,13 +40,30 @@ import { FillOrderComponent } from './Cliente/fill-order/fill-order.component';
     FormPedidoComponent,
     CreateModeloDialog,
     LoadImageComponent,
-    FillOrderComponent
+    FillOrderComponent,
+    OrderDetDialog,
+    ClientesComponent,
+    EditClienteDialog,
+    ArtigosComponent,
+    CoresComponent,
+    ElementosComponent,
+    UtilizadoresComponent,
+    EditArtigoDialog,
+    EditCorDialog,
+    EditElementoDialog,
+    EditUtilizadoresDialog
   ],
   entryComponents: [
     DashboardImageDialog,
     FormPedidoComponent,
     CreateModeloDialog,
-    LoadImageComponent
+    LoadImageComponent,
+    OrderDetDialog,
+    EditClienteDialog,
+    EditArtigoDialog,
+    EditCorDialog,
+    EditElementoDialog,
+    EditUtilizadoresDialog
   ],
   imports: [
   BrowserModule,

@@ -1,4 +1,8 @@
+.mat-dialog-content {
+    width: 100vw;
+    height: 100vh;
 
+}
 .modelos{
     width: 96%;
     height: 100%;
@@ -61,7 +65,8 @@
 .formulario{
     width: 98%;
     height: 98%;
-    padding-left: 50px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 .formulario-descricao{
@@ -93,8 +98,8 @@
 
 
 #CEQTable{
-    width: 100%;
-    font-size: small;
+    width: 98%;
+    font-size: smaller;
 }
 
 table{

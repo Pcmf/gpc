@@ -68,6 +68,12 @@
                         (click)="deleteModelo(element)">
                         <mat-icon>delete_outline</mat-icon>
                     </button>
+                    <button [disabled]="pedido.situacao <= 2" 
+                        mat-icon-button color="primary" 
+                        title="Editar quantidades e tamanhos" 
+                        (click)="orderDetDialog(element)">
+                        <mat-icon>assignment</mat-icon>
+                    </button>
                 </td>
             </ng-container>
             <mat-header-row *matHeaderRowDef="FormPedidoColunas"></mat-header-row>

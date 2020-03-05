@@ -3,6 +3,7 @@ import { DataService } from 'src/app/Services/data.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { PdfMakeService } from './../../Services/pdf-make.service';
+import { RefInternaService } from 'src/app/Services/ref-interna.service';
 
 @Component({
   selector: 'app-form-pedido',
@@ -76,6 +77,16 @@ export class FormPedidoComponent implements OnInit {
     });
   }
 
+  orderDetDialog(element) {
+    // tslint:disable-next-line: no-use-before-declare
+    const dialogRef = this.dialog.open(OrderDetDialog, {
+      data: { pedido: this.pedido, modelo: element },
+      maxWidth: '100vw !important'});
+    dialogRef.afterClosed().subscribe(result => {
+      this.getModelos();
+    });
+  }
+
   sair() {
     this.pedidoIniciado.emit(false);
     this.tabOrigem.emit(this.tab);
@@ -114,6 +125,7 @@ export class FormPedidoComponent implements OnInit {
     setTimeout(() => {
         this.pedidoIniciado.emit(false);
         this.tabOrigem.emit(this.tab);
+        this.reload.emit(true);
     }, 1000);
 
   }
@@ -129,17 +141,33 @@ export class FormPedidoComponent implements OnInit {
 
   paraProducao(pedido) {
     alert('Criar as folhas para produção');
+    this.pdfService.folhasParaProducao(this.pedido);
+    // Change status to "para produção"
+    this.pedido.situacao = 5;
+    this.data.editData('pedido/' + this.pedido.id, this.pedido ).subscribe(
+      resp => {
+        console.log(resp);
+        this.reload.emit(true);
+        this.pedidoIniciado.emit(false);
+        this.tabOrigem.emit(this.tab);
+      }
+    );
   }
 
   concluido(pedido) {
-    alert('marcar como concluido');
+    this.pedido.situacao = 6;
+    this.data.editData('pedido/' + this.pedido.id, this.pedido ).subscribe(
+      resp => {
+        this.reload.emit(true);
+        this.pedidoIniciado.emit(false);
+        this.tabOrigem.emit(this.tab);
+      }
+    );
   }
 
   reproducao(pedido) {
     alert('copiar como novo pedido');
   }
-
-
 }
 
 /**
@@ -160,10 +188,10 @@ export class CreateModeloDialog {
   modelo: any = [];
   autoRefInterna = '';
 
-  constructor(
-    public dialogRef: MatDialogRef<any>,
-    @Inject(MAT_DIALOG_DATA) public dados,
-    private data: DataService
+  constructor(private refService: RefInternaService, 
+              public dialogRef: MatDialogRef<any>,
+              @Inject(MAT_DIALOG_DATA) public dados,
+              private data: DataService
   ) {
 
     if (!dados.create) {
@@ -177,10 +205,9 @@ export class CreateModeloDialog {
       );
     } else {
       // obter refInterna
-      this.data.getData('modelos/ref/' + dados.pedido.id).subscribe(
+      this.refService.getNewRef(dados.pedido.clienteId, dados.pedido.ano).subscribe(
         resp => this.modelo.refinterna = resp
       );
-
     }
 
     this.data.getData('artigos').subscribe(
@@ -232,8 +259,6 @@ export class CreateModeloDialog {
     }
   }
 
-
-
   // Fechar o Dialog
   onNoClick(): void {
     this.dialogRef.close();
@@ -241,3 +266,149 @@ export class CreateModeloDialog {
 
 }
 
+
+/**
+ * Dialog para editar qty tamanhos
+ */
+@Component({
+  // tslint:disable-next-line:component-selector
+  selector: 'order-det-dialog',
+  templateUrl: './order-det-dialog.html',
+  styleUrls: ['./order-det-dialog.scss']
+})
+// tslint:disable-next-line:component-class-suffix
+export class OrderDetDialog {
+  pedidoId: number;
+  pedido: any = [];
+  modelo: any = [];
+  modeloSelectedFotos: any = [];
+  largePic: string;
+  cores: any = [];
+  elementos: any = [];
+  escalas: any = [];
+  tamanhos: string[];
+  detLines: any = [];
+  totalByModelo: number;
+
+  constructor(private data: DataService,
+              private pdfService: PdfMakeService,
+              public dialogRef: MatDialogRef<any>,
+              @Inject(MAT_DIALOG_DATA) public dados
+  ) {
+    this.modelo = dados.modelo;
+    this.pedido = dados.pedido;
+    this.pedidoId = this.pedido.id;
+
+    this.data.getData('cores').subscribe(
+      respa => this.cores = respa
+    );
+    this.data.getData('elementos').subscribe(
+      respb => this.elementos = respb
+    );
+    this.data.getData('escalas').subscribe(
+      respc => {
+        this.escalas = respc;
+
+        this.tamanhos = (this.escalas[this.modelo.escala - 1]).tamanhos.split(',');
+        this.largePic = this.modelo.foto;
+        this.getData();
+      }
+    );
+  }
+
+  getData() {
+    this.data.getData('detalhe/' + this.pedidoId + '/' + this.modelo.id).subscribe(
+      resp => {
+        this.detLines = resp;
+        this.getTotalQtys();
+      }
+    );
+  }
+
+  getTotalQtys() {
+    let total = 0;
+    this.detLines.forEach(el => {
+      this.tamanhos.forEach(t => {
+        !el.qtys[t] ? total = total : total += +el.qtys[t];
+      });
+    });
+    this.totalByModelo = total;
+  }
+
+  // Alterar a imagem do visualizador
+  changeLargePic(pic) {
+    this.largePic = pic;
+  }
+
+  // Guardar uma linha para a DB
+  saveLine(ln, index) {
+    if (ln.linha) {
+      // atualiza linha
+      this.data.editData('detalhe/' + this.pedidoId + '/' + ln.modelo + '/' + ln.linha, ln).subscribe(
+        resp => {
+          this.getTotalQtys();
+        }
+      );
+    } else {
+      // Insere linha
+      this.data.saveData('detalhe/' + this.pedidoId + '/' + ln.modelo, ln).subscribe(
+        resp => {
+          ln.linha = resp;
+          this.getTotalQtys();
+        }
+      );
+    }
+
+  }
+
+  // guardar novo preço de modelo
+  savePrice(preco) {
+    this.modelo.preco = preco;
+    this.saveChanges();
+  }
+
+  saveChanges() {
+    this.data.editData('modelo/' + this.modelo.id, this.modelo).subscribe(
+      resp => console.log(resp)
+    );
+  }
+
+  addLine() {
+    // tslint:disable-next-line:one-variable-per-declaration
+    const linha = {
+      pedido: this.pedidoId, modelo: this.modelo.id, linha: '',
+      cor1: '',
+      cor2: '',
+      elem1: '',
+      elem1cor: '',
+      elem2: '',
+      elem2cor: '',
+      elem3: '',
+      elem3cor: '',
+      qtys: {}
+    };
+
+    this.detLines.push(linha);
+  }
+
+  deleteLine(ln) {
+    this.data.deleteData('detalhe/' + ln.pedido + '/' + ln.modelo + '/' + ln.linha).subscribe(
+      resp => {
+        console.log(resp);
+        this.getData();
+       // this.changeSelectedModel(this.modelo);
+      }
+    );
+  }
+
+  cancel() {
+    // this.location.back();
+    this.dialogRef.close();
+  }
+
+  printFolhas() {
+    alert('Imprimir Folhas');
+    this.pdfService.folhasParaProducaoModelo(this.modelo);
+  }
+
+}

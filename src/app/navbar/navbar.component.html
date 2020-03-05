@@ -6,9 +6,11 @@
             </a>
             <button mat-button [matMenuTriggerFor]="menu">Manutenção</button>
             <mat-menu #menu="matMenu">
-              <button mat-menu-item>Clientes</button>
-              <button mat-menu-item>Configurações</button>
-              <button mat-menu-item>Utilizadores</button>
+              <button mat-menu-item routerLink="/clientes">Clientes</button>
+              <button mat-menu-item routerLink="/artigos">Artigos</button>
+              <button mat-menu-item routerLink="/cores">Cores</button>
+              <button mat-menu-item routerLink="/elementos">Elementos</button>
+              <button mat-menu-item routerLink="/utilizadores">Utilizadores</button>
             </mat-menu>
 
 

@@ -1,0 +1,23 @@
+<div class="container">
+    <form #f="ngForm" (submit)="saveElemento(f.value)">
+        <mat-form-field>
+            <mat-label>ID</mat-label>
+            <input matInput #id="ngModel" name="id" [(ngModel)]="elemento.id" readonly>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Nome</mat-label>
+            <input matInput #nome="ngModel" name="nome" [(ngModel)]="elemento.nome">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Descrição</mat-label>
+            <input matInput #descricao="ngModel" name="descricao" [(ngModel)]="elemento.descricao">
+        </mat-form-field>
+
+        <div class="action">
+            <button mat-button type="button" [mat-dialog-close]>Cancelar</button>
+            <button mat-button color="accent" type="submit">Guardar <mat-icon>save</mat-icon></button>
+        </div>
+    </form>
+</div>

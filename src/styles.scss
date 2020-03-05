@@ -30,3 +30,7 @@ $CalikaB-theme: mat-light-theme($CalikaB-primary, $CalikaB-accent, $CalikaB-warn
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.full-width-dialog .mat-dialog-container {
+    max-width: 100vw !important;
+  }

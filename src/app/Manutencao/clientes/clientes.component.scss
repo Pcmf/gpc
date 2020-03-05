@@ -1,0 +1,30 @@
+.container{
+    width: 100vw;
+
+}
+
+.header{
+    width: 100%;
+    text-align: center;
+    h2, button{
+        display: inline;
+    }
+    button{
+        margin-left: 50%;
+    }
+}
+
+.section{
+    width: 100%;
+}
+
+.mat-table{
+    width: 80%;
+    margin: auto;
+}
+
+.small-pic{
+    max-height: 60px;
+    max-width: 60px;
+}
+

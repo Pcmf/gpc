@@ -1,0 +1,35 @@
+<div class="container">
+    <form #f="ngForm" (submit)="saveUtilizador(f.value)">
+        <mat-form-field>
+            <mat-label>ID</mat-label>
+            <input matInput #id="ngModel" name="id" [(ngModel)]="utilizador.id" readonly>
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Nome</mat-label>
+            <input matInput #nome="ngModel" name="nome" [(ngModel)]="utilizador.nome">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Username</mat-label>
+            <input matInput #username="ngModel" name="username" [(ngModel)]="utilizador.username">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Password</mat-label>
+            <input matInput #password="ngModel" name="password" [(ngModel)]="utilizador.password">
+        </mat-form-field>
+
+        <mat-form-field>
+            <mat-label>Tipo</mat-label>
+            <mat-select #type="ngModel" name="type" [(ngModel)]="utilizador.type">
+                <mat-option value="0">Administrador</mat-option>
+                <mat-option value="1">Utilizador</mat-option>
+            </mat-select>
+          </mat-form-field>
+        <div class="action">
+            <button mat-button type="button" [mat-dialog-close]>Cancelar</button>
+            <button mat-button color="accent" type="submit">Guardar <mat-icon>save</mat-icon></button>
+        </div>
+    </form>
+</div>

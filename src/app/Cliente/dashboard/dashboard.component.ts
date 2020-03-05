@@ -3,6 +3,7 @@ import { ActivatedRoute } from '@angular/router';
 import { DataService } from 'src/app/Services/data.service';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { FormControl } from '@angular/forms';
+import { RefInternaService } from 'src/app/Services/ref-interna.service';
 @Component({
   selector: 'app-dash-client',
   templateUrl: './dashboard.component.html',
@@ -20,10 +21,10 @@ export class DashboardComponent implements OnInit {
   pedidosFinalizados: any = [];
   pedidos: any = [];
   tab: number;
-  autoRefInterna = '';
+  autoRefInterna: string;
 
   displayedColumns: string[] = ['imagem', 'refInterna', 'tema',  'dataPedido', 'dataSituacao'];
-  preview: string;
+  preview = '';
 
   pedidoIniciado = false;
   newPedidoId = 0;
@@ -36,7 +37,8 @@ export class DashboardComponent implements OnInit {
   constructor(
     private route: ActivatedRoute,
     private data: DataService,
-    private dialog: MatDialog
+    private dialog: MatDialog,
+    private refService: RefInternaService
   ) {  }
 
   ngOnInit() {
@@ -100,14 +102,17 @@ export class DashboardComponent implements OnInit {
     );
   }
 
-  reload(){
+  reload() {
     this.loadData(this.id, this.year);
   }
 
   getRefInterna(event) {
-    this.data.getData('pedido/ref/' + this.id + '/' + event.value).subscribe(
-      (resp: string) => this.autoRefInterna = resp
+    this.refService.getNewRef(this.id, event.value).subscribe(
+      (resp: any) => this.autoRefInterna = resp
     );
+/*     this.data.getData('pedido/ref/' + this.id + '/' + event.value).subscribe(
+      (resp: string) => this.autoRefInterna = resp
+    ); */
   }
 
   editarPedido(pid, tab) {
@@ -126,10 +131,12 @@ export class DashboardComponent implements OnInit {
     const obj = {
       anoTema: form.anoTema,
       tema: form.tema,
+      refInterna: form.refInterna,
       refCliente: form.refcliente,
       descricao: form.descricao,
       foto: this.preview
     };
+
     this.data.editData('pedidos/' + this.id, obj).subscribe(
       resp => {
         if (+resp > 0) {

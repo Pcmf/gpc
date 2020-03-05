@@ -43,7 +43,37 @@ export class PdfMakeService {
       }
     );
   }
-  // Produção - Bordados, Corte, Confeção
+
+  folhasParaProducaoModelo(modelo){
+    this.data.getData('pedido/' + modelo.pedido).subscribe(
+      resp => {
+        this.pedido = resp;
+        this.data.getData('clientes/' + this.pedido.clienteId).subscribe(
+              respc => {
+                this.cliente = respc;
+                this.data.getData('modelo/allimgs/' + modelo.id).subscribe(
+                  respm => {
+                    this.modelos = respm;
+                    const ddFolhaBordados = this.create_folhaBordados();
+                    pdfMake.createPdf(ddFolhaBordados).open();
+                  //  const pdfDocGenerator = pdfMake.createPdf(ddFolhaBordados);
+                  //  pdfDocGenerator.getBase64((data) => console.log(data));
+                    const ddFolhaCorte = this.create_folhaCorte();
+                    pdfMake.createPdf(ddFolhaCorte).open();
+                //   const pdfDocGeneratorCorte = pdfMake.createPdf(ddFolhaCorte);
+                    const ddFolhaConfecao = this.create_folhaConfecao();
+                    pdfMake.createPdf(ddFolhaConfecao).open();
+                  }
+                );
+              }
+            );
+      }
+    );
+  }
+
+
+
+  // Produção por pedido - Bordados, Corte, Confeção 
   folhasParaProducao(pedido) {
     this.pedido = pedido;
     this.data.getData('clientes/' + this.pedido.clienteId).subscribe(
