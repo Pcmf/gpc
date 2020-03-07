@@ -25,6 +25,7 @@ import { ArtigosComponent, EditArtigoDialog } from './Manutencao/artigos/artigos
 import { CoresComponent, EditCorDialog } from './Manutencao/cores/cores.component';
 import { ElementosComponent, EditElementoDialog } from './Manutencao/elementos/elementos.component';
 import { UtilizadoresComponent, EditUtilizadoresDialog } from './Manutencao/utilizadores/utilizadores.component';
+import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 
 
 
@@ -79,7 +80,8 @@ import { UtilizadoresComponent, EditUtilizadoresDialog } from './Manutencao/util
     NavbarService,
     NgxImageCompressService,
     LoadImageService,
-    PdfMakeService
+    PdfMakeService,
+    {provide: LocationStrategy, useClass: HashLocationStrategy}
   ],
   bootstrap: [AppComponent]
 })

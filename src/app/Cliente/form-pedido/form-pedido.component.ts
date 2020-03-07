@@ -43,7 +43,10 @@ export class FormPedidoComponent implements OnInit {
 
   private getModelos() {
     this.data.getData('modelos/' + this.pedidoId).subscribe(
-      respM => this.modelos = respM
+      respM => {
+        this.modelos = respM;
+        console.log(this.modelos.length);
+      }
     );
   }
 
@@ -140,7 +143,6 @@ export class FormPedidoComponent implements OnInit {
   }
 
   paraProducao(pedido) {
-    alert('Criar as folhas para produção');
     this.pdfService.folhasParaProducao(this.pedido);
     // Change status to "para produção"
     this.pedido.situacao = 5;
@@ -166,7 +168,7 @@ export class FormPedidoComponent implements OnInit {
   }
 
   reproducao(pedido) {
-    alert('copiar como novo pedido');
+    alert('copiar como novo pedido. Por fazer');
   }
 }
 
@@ -288,6 +290,7 @@ export class OrderDetDialog {
   escalas: any = [];
   tamanhos: string[];
   detLines: any = [];
+  imgs: any = [];
   totalByModelo: number;
 
   constructor(private data: DataService,

@@ -2,7 +2,7 @@
 <div mat-dialog-content>
     <img [src]="data.foto" alt="" width="95%">
     <div mat-dialog-actions>
-        <button mat-button [mat-dialog-close]="tema" cdkFocusInitial>Fechar</button>
+        <button mat-button [mat-dialog-close]="data" cdkFocusInitial>Fechar</button>
     <!-- template seleciona imagem -->
     <app-load-image (imageB64)="receiveImage($event)"></app-load-image>
 </div>

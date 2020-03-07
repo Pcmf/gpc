@@ -1,3 +1,4 @@
 export const environment = {
-  production: true
+  production: true,
+  Address: 'https://gpc.calikababy.com/calikaRest/'
 };

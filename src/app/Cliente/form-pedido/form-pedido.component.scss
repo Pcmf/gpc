@@ -4,7 +4,11 @@
     justify-content: space-between;
     align-content: center;
 }
-
+.mat-card-title{
+    transform: rotate(-90deg) translateX(-60px);
+    font-size: medium;
+    background-color: yellow;
+}
 .mat-card-content{
     width: 33%;
     height: 120px;
@@ -12,6 +16,7 @@
     justify-content: space-between;
     align-items: baseline;
     flex-wrap: wrap;
+
 }
 .mat-card-content img{
     height: 120px;
